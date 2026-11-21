@@ -1,0 +1,27 @@
+name: Testes e compilacao
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validar:
+    name: Validar algoritmos e interface
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Executar testes
+        run: npm test
+      - name: Compilar algoritmo para o navegador
+        run: npm run build
+      - name: Conferir bundle versionado
+        run: git diff --exit-code -- assets/js/algoritmos.bundle.js
