@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | Conta em nuvem | AWS — conta conectada e identidade conferida; região de trabalho `us-east-2` | Verificado |
 | Aplicação web | AlgoLab: algoritmos dos Entregáveis 1/2/4 + calculadora do Entregável 3 | Desenvolvido |
-| URL na nuvem | Hospedagem estática no Amazon S3 | **Pendente de autorização para criar recursos com cobrança possível** |
+| URL na nuvem | [Site estático no Amazon S3](http://ruan-levi-entregavel5-algolab-645822828419.s3-website.us-east-2.amazonaws.com/) | Bucket, arquivos e acesso público configurados; teste externo em navegador comum pendente |
 
 ## Como cada entregável contribuiu
 
@@ -28,7 +28,7 @@
 
 ## Evidências para apresentar
 
-- Abrir a **URL em operação na AWS** quando o deploy estiver concluído.
+- Abrir a **[URL da AWS](http://ruan-levi-entregavel5-algolab-645822828419.s3-website.us-east-2.amazonaws.com/)** e confirmar o acesso externo antes de enviar a atividade.
 - Demonstrar Número Primo, Fibonacci, QuickSort e Calculadora.
 - Mostrar os arquivos de `src/` e os testes em `tests/`.
 - Abrir o workflow de testes em `.github/workflows/ci.yml`.
