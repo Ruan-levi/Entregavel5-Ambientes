@@ -8,6 +8,16 @@
 
 Hospedagem: AWS EC2 `us-east-2` (Ohio). A URL atual é HTTP (sem criptografia), adequada apenas à demonstração com dados fictícios. O IP público poderá mudar quando a instância for parada e reiniciada. Nenhuma senha é armazenada neste repositório.
 
+### Primeiro acesso administrativo na AWS
+
+O usuário inicial é `admin`. A senha inicial foi gerada automaticamente na instância, **não está no GitHub**. Para consultar a senha de demonstração com segurança, abra **AWS Console > EC2 > Instâncias**, selecione a instância **CantinaFlow - Entrega Final**, clique em **Conectar > Session Manager > Conectar** e execute:
+
+```bash
+sudo cat /root/cantinaflow-demo-credentials
+```
+
+O resultado identifica a senha de `CantinaFlow admin` e a de `CantinaFlow operador`. Copie apenas a senha de administrador para seu uso; não compartilhe a senha em prints nem no repositório. Se o Session Manager solicitar acesso, é necessário estar na conta AWS com permissão para iniciar a sessão. **Depois do primeiro login, acesse Acessos e redefina a senha do admin.**
+
 ### Gerenciar acessos
 
 Faça login com seu usuário administrador. No menu lateral **Acessos** você pode cadastrar novos usuários, escolher o perfil **admin** ou **operador**, redefinir a senha e bloquear/reativar contas. Ao redefinir a senha, as sessões da conta são invalidadas. O operador pode registrar vendas e clientes; o administrador também gerencia produtos, estoque, relatórios e acessos.
