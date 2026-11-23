@@ -13,18 +13,49 @@ export function createApp(database='cantinaflow.sqlite'){
  CREATE TABLE IF NOT EXISTS sale_items(id INTEGER PRIMARY KEY,sale_id INTEGER NOT NULL REFERENCES sales(id),product_id INTEGER NOT NULL REFERENCES products(id),quantity INTEGER NOT NULL CHECK(quantity>0),unit_price_cents INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS receivables(id INTEGER PRIMARY KEY,sale_id INTEGER NOT NULL UNIQUE REFERENCES sales(id),amount_cents INTEGER NOT NULL,due_date TEXT NOT NULL,paid_at TEXT);
  CREATE TABLE IF NOT EXISTS stock_movements(id INTEGER PRIMARY KEY,product_id INTEGER NOT NULL REFERENCES products(id),delta INTEGER NOT NULL,reason TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);`);
+ if(!db.prepare("PRAGMA table_info(users)").all().some(c=>c.name==='active')) db.exec('ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1');
  const query=(sql,...args)=>db.prepare(sql).all(...args);const one=(sql,...args)=>db.prepare(sql).get(...args);const run=(sql,...args)=>db.prepare(sql).run(...args);
  const fail=(status,message)=>{throw Object.assign(new Error(message),{status});};
  const text=(v,max=120)=>String(v??'').trim().slice(0,max);
  const integer=(v,name,min=0)=>{if(!Number.isSafeInteger(v)||v<min)fail(400,`${name} inválido`);return v;};
  const money=(v,name='Valor')=>integer(v,name,0);
- const auth=token=>{if(!token)fail(401,'Autenticação necessária');const t=randomHash(token);const u=one(`SELECT u.id,u.username,u.role FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>datetime('now')`,t);if(!u)fail(401,'Sessão inválida ou expirada');return u;};
+ const auth=token=>{if(!token)fail(401,'Autenticação necessária');const t=randomHash(token);const u=one(`SELECT u.id,u.username,u.role FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>datetime('now') AND u.active=1`,t);if(!u)fail(401,'Sessão inválida ou expirada');return u;};
  const admin=u=>{if(u.role!=='admin')fail(403,'Acesso restrito ao administrador');};
  const randomHash=t=>scryptSync(t,'cantinaflow-session',32).toString('hex');
  const dispatch=(method,path,body={},token,params={})=>{
-  if(method==='POST'&&path==='/api/login'){const u=one('SELECT * FROM users WHERE username=?',text(body.username,80));if(!u||!verifyPassword(String(body.password??''),u.password_hash))fail(401,'Credenciais inválidas');const t=randomBytes(32).toString('hex');run(`INSERT INTO sessions(token_hash,user_id,expires_at) VALUES(?,?,datetime('now','+8 hours'))`,randomHash(t),u.id);return {token:t,user:{id:u.id,username:u.username,role:u.role}};}
+  // Acesso público deliberadamente restrito: não revela clientes, vendas ou estoque interno.
+  if(method==='GET'&&path==='/api/public/products')return query('SELECT name,unit,price_cents FROM products WHERE active=1 ORDER BY name');
+  if(method==='GET'&&path==='/api/public/summary')return {products:one('SELECT COUNT(*) n FROM products WHERE active=1').n,mode:'visualizacao',write_access:false};
+  if(method==='POST'&&path==='/api/login'){const u=one('SELECT * FROM users WHERE username=?',text(body.username,80));if(!u||!u.active||!verifyPassword(String(body.password??''),u.password_hash))fail(401,'Credenciais inválidas');const t=randomBytes(32).toString('hex');run(`INSERT INTO sessions(token_hash,user_id,expires_at) VALUES(?,?,datetime('now','+8 hours'))`,randomHash(t),u.id);return {token:t,user:{id:u.id,username:u.username,role:u.role}};}
   const u=auth(token);
   if(method==='GET'&&path==='/api/me')return u;
+  if(method==='GET'&&path==='/api/users'){admin(u);return query('SELECT id,username,role,active FROM users ORDER BY id');}
+  if(method==='POST'&&path==='/api/users'){
+   admin(u); const username=text(body.username,40),password=String(body.password??''),role=text(body.role,20);
+   if(!/^[a-zA-Z][a-zA-Z0-9_.-]{2,39}$/.test(username))fail(400,'Usuário deve ter 3 a 40 caracteres, começando por letra');
+   if(password.length<12||password.length>128)fail(400,'Senha deve ter entre 12 e 128 caracteres');
+   if(!['admin','operador'].includes(role))fail(400,'Perfil inválido');
+   if(one('SELECT id FROM users WHERE username=?',username))fail(409,'Usuário já existe');
+   const r=run('INSERT INTO users(username,password_hash,role) VALUES(?,?,?)',username,hashPassword(password),role);
+   return one('SELECT id,username,role,active FROM users WHERE id=?',Number(r.lastInsertRowid));
+  }
+  let um=path.match(/^\/api\/users\/(\d+)\/password$/);
+  if(method==='PATCH'&&um){admin(u); const id=Number(um[1]),password=String(body.password??'');
+   if(password.length<12||password.length>128)fail(400,'Senha deve ter entre 12 e 128 caracteres');
+   if(!one('SELECT id FROM users WHERE id=?',id))fail(404,'Usuário não encontrado');
+   run('UPDATE users SET password_hash=? WHERE id=?',hashPassword(password),id);
+   run('DELETE FROM sessions WHERE user_id=?',id);
+   return {ok:true,sessions_revoked:true};
+  }
+  um=path.match(/^\/api\/users\/(\d+)\/status$/);
+  if(method==='PATCH'&&um){admin(u); const id=Number(um[1]);
+   if(id===u.id)fail(400,'Você não pode desativar sua própria conta');
+   if(typeof body.active!=='boolean')fail(400,'Status inválido');
+   const r=run('UPDATE users SET active=? WHERE id=?',body.active?1:0,id);
+   if(!r.changes)fail(404,'Usuário não encontrado');
+   if(!body.active)run('DELETE FROM sessions WHERE user_id=?',id);
+   return {ok:true,active:body.active};
+  }
   if(method==='POST'&&path==='/api/logout'){run('DELETE FROM sessions WHERE token_hash=?',randomHash(token));return {ok:true};}
   if(method==='GET'&&path==='/api/products')return query('SELECT * FROM products ORDER BY name');
   if(method==='POST'&&path==='/api/products'){admin(u);const name=text(body.name),sku=text(body.sku,50),unit=text(body.unit,20)||'un';if(!name||!sku)fail(400,'Nome e SKU obrigatórios');const price=money(body.price_cents,'Preço'),stock=integer(body.stock,'Estoque');const r=run('INSERT INTO products(name,sku,unit,price_cents,stock) VALUES(?,?,?,?,?)',name,sku,unit,price,stock);run('INSERT INTO price_history(product_id,new_price_cents) VALUES(?,?)',Number(r.lastInsertRowid),price);return one('SELECT * FROM products WHERE id=?',Number(r.lastInsertRowid));}
