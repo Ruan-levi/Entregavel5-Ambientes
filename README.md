@@ -1,5 +1,22 @@
 # CantinaFlow — Entrega Final | Ambientes de Desenvolvimento de Software
 
+## 🌐 Acesse a aplicação publicada na AWS
+
+**[Abrir CantinaFlow na AWS (Amazon EC2)](http://3.149.254.9/)**
+
+**[Visitar sem login — catálogo público](http://3.149.254.9/#visitar)** | **[Status da API REST](http://3.149.254.9/api/health)**
+
+Hospedagem: AWS EC2 `us-east-2` (Ohio). A URL atual é HTTP (sem criptografia), adequada apenas à demonstração com dados fictícios. O IP público poderá mudar quando a instância for parada e reiniciada. Nenhuma senha é armazenada neste repositório.
+
+### Gerenciar acessos
+
+Faça login com seu usuário administrador. No menu lateral **Acessos** você pode cadastrar novos usuários, escolher o perfil **admin** ou **operador**, redefinir a senha e bloquear/reativar contas. Ao redefinir a senha, as sessões da conta são invalidadas. O operador pode registrar vendas e clientes; o administrador também gerencia produtos, estoque, relatórios e acessos.
+
+No botão **Visitar sem login**, a aplicação mostra apenas nome, unidade e preço dos produtos. Não revela clientes, estoque interno, vendas, dados financeiros ou credenciais. Alterações e consultas internas exigem autenticação.
+
+**Aviso:** a demonstração não deve receber dados pessoais reais. Antes do uso real é necessário configurar HTTPS, backup, proteção contra tentativas de login e outras medidas de segurança.
+
+
 Sistema acadêmico de gestão de cantina / pequeno supermercado. Substitui o antigo AlgoLab da Entregável 5.
 
 ## Requisitos da atividade
