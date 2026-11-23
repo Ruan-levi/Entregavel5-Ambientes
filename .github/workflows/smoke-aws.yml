@@ -1,0 +1,16 @@
+name: CantinaFlow - verificacao publica AWS
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar API REST via internet
+        run: |
+          curl --fail --silent --show-error --connect-timeout 12 --max-time 25 http://3.149.254.9/api/health | grep '"status":"ok"'
+      - name: Verificar pagina principal via internet
+        run: |
+          curl --fail --silent --show-error --connect-timeout 12 --max-time 25 http://3.149.254.9/ | grep -q 'CantinaFlow'
