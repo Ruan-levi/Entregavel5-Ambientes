@@ -1,6 +1,10 @@
 node_modules/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 .env
-.env.*
-!.env.example
 .DS_Store
-coverage/
+.env
+*.db
+*.sqlite-shm
+*.sqlite-wal
