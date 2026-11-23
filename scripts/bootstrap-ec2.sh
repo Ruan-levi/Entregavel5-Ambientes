@@ -1,6 +1,21 @@
 #!/bin/bash
 set -euo pipefail
-exec > >(tee -a /var/log/cantinaflow-install.log) 2>&1
+exec > >(tee -a /var/log/cantinaflow-install.log /dev/console) 2>&1
+if [ ! -f /etc/cantinaflow.env ]; then
+  ADMIN_DEMO=$(openssl rand -hex 16)
+  OPERATOR_DEMO=$(openssl rand -hex 16)
+  cat > /etc/cantinaflow.env <<EOCREDS
+NODE_ENV=production
+DB_FILE=/var/lib/cantinaflow/cantinaflow.sqlite
+PORT=3000
+ADMIN_PASSWORD=$ADMIN_DEMO
+OPERATOR_PASSWORD=$OPERATOR_DEMO
+EOCREDS
+  chmod 600 /etc/cantinaflow.env
+  printf 'CantinaFlow admin: %s\nCantinaFlow operador: %s\n' "$ADMIN_DEMO" "$OPERATOR_DEMO" > /root/cantinaflow-demo-credentials
+  chmod 600 /root/cantinaflow-demo-credentials
+  echo 'CantinaFlow credentials saved at /root/cantinaflow-demo-credentials'
+fi
 dnf install -y nodejs22 nodejs22-npm git nginx
 mkdir -p /opt/cantinaflow /var/lib/cantinaflow
 if [ ! -f /opt/cantinaflow/package.json ]; then
