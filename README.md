@@ -1,6 +1,14 @@
-# ⚔️ CONQUEST — Entregável 5 | GitHub Pages + Nhost
+# ⚔️ CONQUEST — Entregáveis 5 e 6 | GitHub Pages + Nhost
 
 **Ambientes de Desenvolvimento de Software · UNIFOR · Jogo 3D educacional**
+
+## Entregável 6 — Full Stack (nova etapa)
+
+**[📚 ABRIR A APRESENTAÇÃO DO ENTREGÁVEL 6](https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/)** · [Matriz dos seis ambientes](docs/ENTREGAVEL6.md) · [Roteiro de apresentação](docs/ROTEIRO_APRESENTACAO_E6.md) · [Protótipo no Figma](https://www.figma.com/design/Gir9pqcDf92GYOmacmwmfO) · [Quadro de atividades](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues) · [Testes Selenium](.github/workflows/selenium.yml)
+
+A **Entregável 6 reaproveita a aplicação full stack da Entregável 5**, sem remover seu jogo ou mudar o domínio principal: o ambiente de entrega, o protótipo Figma, o workspace do VS Code, as tarefas GitHub Issues e os testes Selenium são adicionados como arquivos próprios. A nova apresentação é servida pelo **caminho `/entregavel6/`** do mesmo GitHub Pages. Consulte os documentos específicos para as seis ferramentas e as evidências de execução.
+
+---
 
 [**🎮 Jogar a Entregável 5**](https://ruan-levi.github.io/Entregavel5-Ambientes/) · [**GitHub Actions**](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions) · [**Painel Nhost**](https://app.nhost.io/) · [**Conquest Nuvem original**](https://github.com/Ruan-levi/Conquest-nuvem)
 
