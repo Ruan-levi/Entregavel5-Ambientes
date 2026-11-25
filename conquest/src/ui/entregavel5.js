@@ -40,6 +40,10 @@ function App() {
     setRanking(newRanking); setScores(newScores);
   }
   useEffect(() => {
+    window.dispatchEvent(new CustomEvent('conquest:account-dialog', { detail: { open } }));
+    return () => window.dispatchEvent(new CustomEvent('conquest:account-dialog', { detail: { open: false } }));
+  }, [open]);
+  useEffect(() => {
     const buttons = ['e5-open', 'e5-sidebar-open'].map(id => document.getElementById(id)).filter(Boolean);
     const clicked = () => { setOpen(true); setMessage(''); };
     buttons.forEach(button => button.addEventListener('click', clicked));
@@ -101,7 +105,7 @@ function App() {
       h('button',{className:'e5-close',type:'button',onClick:()=>setOpen(false),'aria-label':'Fechar'},'×'),
       h('small',{className:'e5-eyebrow'},'ENTREGÁVEL 5 · AWS EC2'),
       h('h2',null,'Conquest · Meu progresso'),
-      h('p',null,'A jornada 3D pode ser jogada sem login. Crie uma conta aqui para salvar pontuações no SQLite da AWS. O cadastro e as pontuações são desta aplicação AWS, independentemente do projeto Nhost.'),
+      h('p',null,'A jornada 3D pode ser jogada sem login. Crie uma conta aqui para salvar pontuações no SQLite da AWS. O cadastro, as sessões e as pontuações são gerenciados pelo backend Node.js e armazenados no SQLite da AWS.'),
       message && h('div',{className:'e5-message',role:'status'},message),
       !user ? h('form',{className:'e5-form',onSubmit:submit},
         h('div',{className:'e5-tabs'},

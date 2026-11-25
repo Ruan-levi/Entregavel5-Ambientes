@@ -4,6 +4,7 @@ import { createWorld } from "./game/scene.js";
 import { createGameState, interact, acceptLioraQuest, getBattleQuestion, answerQuestion, canInteract, stageLabel, makeResult } from "./game/logic.js";
 import { currentTarget, distance2D } from "./game/world-map.js";
 import { nearbyScenicSpot, inspectScenicSpot } from "./game/interactions.js";
+import { isEditableKeyboardTarget } from "./game/keyboard.js";
 
 const $ = (id) => document.getElementById(id);
 const keys = Object.create(null);
@@ -18,6 +19,7 @@ let audioContext = null;
 let lastTime = 0;
 let hudTime = 0;
 let toastTimeout = 0;
+let accountDialogOpen = false;
 const ui = {
   intro: $("intro-overlay"), hud: $("hud-left"), objective: $("objective-panel"),
   dialogue: $("dialogue-overlay"), battle: $("battle-overlay"), end: $("end-overlay"),
@@ -201,9 +203,13 @@ function setPaused(value) {
   toggle(ui.pause, paused);
   Object.keys(keys).forEach(k => keys[k] = false);
 }
+function clearGameKeys() { Object.keys(keys).forEach(k => { keys[k] = false; }); }
 function onKeyDown(event) {
-  if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName || "")) return;
+  // Campos de cadastro/login (React), selects e editores nunca recebem atalhos do jogo.
+  if (accountDialogOpen || isEditableKeyboardTarget(event) || isEditableKeyboardTarget(document.activeElement)) return;
+  if (!started) return;
   const k = event.key.toLowerCase();
+  if (paused && k !== "escape") return;
   if (["w","a","s","d","shift","e","q","r","arrowup","arrowdown","arrowleft","arrowright","escape","1","2","3","4"].includes(k)) event.preventDefault();
   if (k === "escape") {
     if (isVisible(ui.battle)) return;
@@ -213,10 +219,17 @@ function onKeyDown(event) {
   if (k === "e" && !event.repeat) return interactNow();
   keys[k] = true;
 }
-function onKeyUp(event) { keys[event.key.toLowerCase()] = false; }
+function onKeyUp(event) {
+  if (!accountDialogOpen && !isEditableKeyboardTarget(event)) keys[event.key.toLowerCase()] = false;
+}
 window.addEventListener("keydown", onKeyDown);
 window.addEventListener("keyup", onKeyUp);
-window.addEventListener("blur", () => Object.keys(keys).forEach((k) => keys[k] = false));
+window.addEventListener("focusin", event => { if (isEditableKeyboardTarget(event)) clearGameKeys(); });
+window.addEventListener("conquest:account-dialog", event => {
+  accountDialogOpen = Boolean(event.detail?.open);
+  clearGameKeys();
+});
+window.addEventListener("blur", clearGameKeys);
 for (const button of document.querySelectorAll("[data-control]")) {
   const control = button.dataset.control;
   const onDown = (event) => {
