@@ -1,109 +1,108 @@
-# ⚔️ CONQUEST — Entregáveis 5 e 6 | GitHub Pages + Nhost
+# CONQUEST — Entregável 6 | Aplicação Full Stack independente
 
-**Ambientes de Desenvolvimento de Software · UNIFOR · Jogo 3D educacional**
+**Disciplina: Ambientes de Desenvolvimento de Software — UNIFOR**
 
-## Entregável 6 — Full Stack (nova etapa)
+Esta é a **sexta entrega**, preparada como projeto próprio, que **reutiliza o CONQUEST da Entregável 5** (motor 3D Babylon.js, interface React, autenticação Nhost, API REST de duelo e PostgreSQL). Ela não deve substituir os arquivos da Entregável 5 e não modifica o CONQUEST Nuvem.
 
-**[📚 ABRIR A APRESENTAÇÃO DO ENTREGÁVEL 6](https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/)** · [Matriz dos seis ambientes](docs/ENTREGAVEL6.md) · [Roteiro de apresentação](docs/ROTEIRO_APRESENTACAO_E6.md) · [Protótipo no Figma](https://www.figma.com/design/Gir9pqcDf92GYOmacmwmfO) · [Quadro de atividades](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues) · [Testes Selenium](.github/workflows/selenium.yml)
+## Separação dos projetos
 
-A **Entregável 6 reaproveita a aplicação full stack da Entregável 5**, sem remover seu jogo ou mudar o domínio principal: o ambiente de entrega, o protótipo Figma, o workspace do VS Code, as tarefas GitHub Issues e os testes Selenium são adicionados como arquivos próprios. A nova apresentação é servida pelo **caminho `/entregavel6/`** do mesmo GitHub Pages. Consulte os documentos específicos para as seis ferramentas e as evidências de execução.
-
----
-
-[**🎮 Jogar a Entregável 5**](https://ruan-levi.github.io/Entregavel5-Ambientes/) · [**GitHub Actions**](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions) · [**Painel Nhost**](https://app.nhost.io/) · [**Conquest Nuvem original**](https://github.com/Ruan-levi/Conquest-nuvem)
-
-Esta é uma **cópia independente do jogo CONQUEST Nuvem**, reutilizada e adaptada à Entregável 5. O código 3D original, o frontend, as interações, a autenticação, os duelos, o ranking e as integrações Nhost foram copiados do commit [ea69ceec](https://github.com/Ruan-levi/Conquest-nuvem/commit/ea69ceec1a95b2d5f768bbcd3cef2e81c8339674). **Nenhum arquivo do CONQUEST Nuvem foi alterado.** Foi acrescentado um painel acadêmico React, testes de teclado e um workflow de GitHub Pages próprio.
-
-A versão AWS/SQLite anterior desta disciplina foi substituída na branch `main`, mas permanece recuperável no histórico, até o commit [35d2a34f](https://github.com/Ruan-levi/Entregavel5-Ambientes/commit/35d2a34fcaae24324ec0b802d3b5b21a8aec0bd5). A instância EC2 antiga não é a hospedagem deste novo site.
-
-## Tecnologias reais
-
-| Camada | Tecnologia | Arquivos |
+| Entrega | Repositório | Site |
 |---|---|---|
-| Mundo e interações 3D | JavaScript, Babylon.js / WebGL | `src/main.js`, `src/game/` |
-| Página e interface | HTML5 e CSS3 | `index.html`, `src/style.css` |
-| Painel da atividade | React 18 | `src/ui/entregavel5.js`, `src/ui/entregavel5.css` |
-| Cadastro e login | Nhost Auth | `src/services/nhost.js` |
-| Banco e histórico | PostgreSQL + GraphQL (Nhost) | `nhost/migrations/001_conquest_scores.sql` |
-| API REST/Node.js | Nhost Functions, JWT e lógica de duelo | `functions/duel.js` |
-| Ranking / realtime | Function REST, Hasura, WebSocket | `functions/duel.js`, `nhost/migrations/002_conquest_duels.sql` |
-| Storage privado | Nhost Storage | `src/services/nhost.js` |
-| Integração e deploy | Vite, npm, GitHub Actions, GitHub Pages | `.github/workflows/pages.yml` |
+| Entregável 5 (original preservado) | [Entregavel5-Ambientes](https://github.com/Ruan-levi/Entregavel5-Ambientes) | [Jogo E5](https://ruan-levi.github.io/Entregavel5-Ambientes/) |
+| Entregável 6 (projeto próprio) | **Entregavel6-Ambientes — a criar** | **https://ruan-levi.github.io/Entregavel6-Ambientes/** — previsto, ainda não publicado |
 
-**O React é um painel complementar; o jogo em si usa Babylon.js.** O GitHub Pages publica somente arquivos estáticos, e o backend da aplicação executa no Nhost, não no GitHub. A Function de duelo utiliza métodos `GET` (ranking) e `POST` (criação, entrada, status, resposta, cancelamento). O histórico pessoal da jornada utiliza GraphQL.
+O código da Entregável 6 está temporariamente **preparado para transferência** na branch `entregavel6/fullstack-independente` do repositório E5; quando for criado o repositório novo, será publicado separadamente. Não apresente o link novo como ativo antes de completar a transferência.
 
-## Estrutura do projeto para a apresentação
+## Seis ambientes da atividade
+
+| Categoria | Ambiente demonstrado | Evidência |
+|---|---|---|
+| 1. Gestão de tarefas | GitHub Issues | [Plano da equipe](docs/GESTAO_E6.md) e quadro a criar no repositório E6 |
+| 2. UI/UX | Figma | [Protótipo E6](https://www.figma.com/design/Gir9pqcDf92GYOmacmwmfO) |
+| 3. Desenvolvimento / IDE | Visual Studio Code | Configurações `.vscode/`, scripts npm |
+| 4. Banco de dados | Nhost / Hasura / PostgreSQL | `nhost/migrations/`, `src/services/nhost.js` |
+| 5. Testes | Selenium / Chrome, Vitest, Node | `entregavel6/tests/`, `tests/`, `.github/workflows/selenium.yml` |
+| 6. Execução e servidor | GitHub Pages + Nhost Functions | `.github/workflows/pages.yml`, `functions/duel.js` |
+
+## Arquitetura full stack
 
 ```text
-Entregavel5-Ambientes/
-├── index.html                 # Portal, HUD e canvas 3D
-├── src/
-│   ├── main.js                # Entrada do jogo e controles
-│   ├── style.css              # Visual do jogo
-│   ├── game/                  # Cenas, questões, movimento e batalhas
-│   ├── ui/
-│   │   ├── duel.js            # Duelo de dois jogadores
-│   │   ├── entregavel5.js     # React: login, cadastro, ranking e histórico
-│   │   └── entregavel5.css
-│   └── services/nhost.js      # Auth, GraphQL, REST, Storage e Realtime
-├── functions/
-│   ├── duel.js                # Backend REST que valida duelo e pontuações
-│   └── _shared/               # Questões validadas pelo backend
-├── nhost/migrations/          # SQL PostgreSQL da atividade
-├── tests/                     # Testes do jogo, Nhost e teclado
-├── scripts/                   # Verificação de build e site publicado
-├── docs/                      # Requisitos, Nhost, arquitetura e apresentação
-├── package.json
-├── vite.config.js
-└── .github/workflows/pages.yml  # CI/CD do novo Pages
+Entregável 6 — GitHub Pages (jogo Babylon.js + React)
+                   |
+                  HTTPS
+                   |
+            Nhost Auth / JWT
+            Function REST Node.js
+            Hasura / GraphQL
+                   |
+                PostgreSQL
 ```
 
-## Integração Nhost compartilhada pelos dois repositórios
+A integração Nhost é compartilhada intencionalmente com a Entregável 5. **Duas aplicações independentes podem acessar o mesmo serviço de backend**, sem estarem hospedadas na mesma máquina virtual. O GitHub Pages entrega somente o frontend compilado; as Functions e o banco executam no Nhost.
 
-A Entregável 5 utiliza o **mesmo projeto Nhost** da aplicação original:
+## Organização do código
 
-| Valor público | Configuração |
-|---|---|
-| `VITE_NHOST_SUBDOMAIN` | `xbnokoslfakjqteiyvbu` |
-| `VITE_NHOST_REGION` | `sa-east-1` |
-| Nhost Dashboard | https://app.nhost.io/ |
-| Projeto original | https://ruan-levi.github.io/Conquest-nuvem/ |
-| Entregável 5 | https://ruan-levi.github.io/Entregavel5-Ambientes/ |
+```text
+├── index.html                      # Portal e jogo 3D (base E5 reutilizada)
+├── src/main.js                     # Interações, teclado e progressão
+├── src/game/                      # Babylon.js e perguntas matemáticas
+├── src/ui/entregavel5.js           # Painel React reaproveitado do E5
+├── src/services/nhost.js           # Auth, GraphQL e Function REST
+├── functions/duel.js               # Backend Node.js da API de duelos
+├── nhost/migrations/               # Estrutura PostgreSQL
+├── public/entregavel6/index.html   # Página demonstrativa própria do E6
+├── entregavel6/tests/              # Testes Selenium da sexta entrega
+├── tests/                          # Testes unitários e backend
+├── .vscode/                        # Workspace do ambiente de desenvolvimento
+├── docs/                           # Requisitos, arquitetura, roteiro e evidências
+├── .github/workflows/pages.yml     # Publicação independente do E6
+└── .github/workflows/selenium.yml  # Testes de navegador do E6
+```
 
-O pipeline já contém esses valores **públicos** como padrão e permite substituí-los pelas GitHub Actions Variables `NHOST_SUBDOMAIN` e `NHOST_REGION`. Não versionar `NHOST_ADMIN_SECRET` ou outros segredos em `VITE_*`, JavaScript ou HTML.
+## Rodar e testar
 
-**Conexão à mesma base de dados não é o mesmo que vincular os dois repositórios ao deploy do Nhost.** As Functions e migrações continuam dependentes do projeto Nhost já existente, possivelmente conectado apenas ao repositório original. Para alterar os vínculos de implantação, use o dashboard Nhost e confirme a função `duel` ativa. Não execute de novo migrações já aplicadas.
-
-O código da Function permite os dois sites, pois ambos têm a origem `https://ruan-levi.github.io`; no Auth do Nhost, confirme os URLs de redirecionamento necessários para as duas aplicações.
-
-## Como demonstrar
-
-1. Abra [CONQUEST Entregável 5](https://ruan-levi.github.io/Entregavel5-Ambientes/), inicie a jornada e mostre os recursos 3D.
-2. Clique em **Painel React · Nhost** e mostre o formulário de cadastro/login e as consultas de histórico e ranking do Nhost.
-3. Clique em **Minha conta** para mostrar integração original Auth/GraphQL/Storage.
-4. Abra **Duelo online** para demonstrar o serviço REST e a correção no backend, se a Function estiver ativa.
-5. Abra [GitHub Actions](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions) para demonstrar o ciclo automático de teste, compilação e publicação.
-6. Percorra o [roteiro dos códigos](docs/ROTEIRO_DO_CODIGO.md).
-
-## Executar localmente
-
-Node.js **22.12+** e npm:
+Node.js 22.12+, npm, Python e Chrome:
 
 ```bash
-git clone https://github.com/Ruan-levi/Entregavel5-Ambientes.git
-cd Entregavel5-Ambientes
 npm ci
-npm test
 cp .env.example .env
+npm test
 npm run dev
 ```
 
-Acesse a URL local mostrada pelo Vite. Os dados Nhost públicos estão no `.env.example`; copiar para `.env` ativa a configuração em desenvolvimento. O domínio `localhost:5173` já é aceito na Function de duelo.
+Acesse `http://localhost:5173/` para jogar e `http://localhost:5173/entregavel6/index.html` para apresentar os seis ambientes.
 
-## Publicar pelo GitHub Pages
+Para os testes em navegador:
 
-O pipeline `.github/workflows/pages.yml` compila com o caminho `/Entregavel5-Ambientes/`, roda testes e valida o site publicado. Para eliminar a concorrência do Jekyll, abra [Settings → Pages](https://github.com/Ruan-levi/Entregavel5-Ambientes/settings/pages) e selecione **Build and deployment → Source: GitHub Actions**.
+```bash
+python -m pip install -r entregavel6/requirements.txt
+python -m unittest discover -s entregavel6/tests -p 'test_*.py' -v
+```
 
-Confira as instruções do [Nhost Auth, banco, Storage e realtime](docs/NHOST.md) e do [duelo + REST](docs/NHOST_DUELOS.md).
+## Criar o repositório e publicar separadamente
 
-**Limite acadêmico:** o backend REST atual da Function possui um endpoint `GET` e um endpoint `POST` com diferentes operações de duelo. Caso o professor exija **quatro rotas REST independentes** ou CRUD específico por integrante, ainda será necessário implementar essas rotas. O jogo original completo foi priorizado na cópia e não se deve declarar atendimento a um requisito não demonstrado. O ranking competitivo é calculado no backend; a pontuação da campanha local continua demonstrativa.
+1. Crie o repositório público **`Entregavel6-Ambientes`** no GitHub, vazio, **sem gerar README**.
+2. No terminal, execute:
+
+```bash
+git clone --branch entregavel6/fullstack-independente --single-branch https://github.com/Ruan-levi/Entregavel5-Ambientes.git Entregavel6-Ambientes
+cd Entregavel6-Ambientes
+git remote set-url origin https://github.com/Ruan-levi/Entregavel6-Ambientes.git
+git push -u origin HEAD:main
+```
+
+3. No **novo** repositório, abra **Settings → Pages → Build and deployment → Source: GitHub Actions**. A pipeline exclusiva do E6 compila com `/Entregavel6-Ambientes/`, executa testes e publica o jogo na raiz e o portal de seis ambientes em `/entregavel6/`.
+4. Confira as GitHub Actions e crie as Issues próprias da E6 conforme [GESTAO_E6.md](docs/GESTAO_E6.md).
+
+A versão na branch de preparação é para **transferência**, não para mesclar à `main` da Entregável 5. O Git guarda o histórico de reaproveitamento.
+
+## Material de apresentação
+
+- [Matriz dos seis ambientes](docs/ENTREGAVEL6.md)
+- [Roteiro de apresentação](docs/ROTEIRO_APRESENTACAO_E6.md)
+- [Arquitetura](docs/ARQUITETURA_E6.md)
+- [Plano de testes](docs/PLANO_TESTES_E6.md)
+- [Protótipo e UI/UX](docs/DESIGN_E6.md)
+- [Gestão e planejamento](docs/GESTAO_E6.md)
+
+**Limites:** a integração Nhost usa o mesmo backend e dados do E5. Demonstrar acesso privado ao banco requer entrar no painel Nhost, e realizar cadastro com e-mail ou duelo entre duas pessoas ainda precisa de validação manual.

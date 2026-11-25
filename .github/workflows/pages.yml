@@ -1,4 +1,4 @@
-name: CONQUEST Entregável 5 - Nhost e GitHub Pages
+name: CONQUEST Entregável 6 - Nhost e GitHub Pages
 on:
   push:
     branches: [main]
@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: entregavel5-pages-${{ github.ref }}
+  group: entregavel6-pages-${{ github.ref }}
   cancel-in-progress: true
 env:
   NHOST_SUBDOMAIN: ${{ vars.NHOST_SUBDOMAIN || 'xbnokoslfakjqteiyvbu' }}
@@ -52,7 +52,7 @@ jobs:
         with:
           path: ./dist
   pages-deploy:
-    name: Publicar Entregável 5 no GitHub Pages
+    name: Publicar Entregável 6 no GitHub Pages
     needs: pages-build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
@@ -82,7 +82,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: node scripts/check-pages-live.mjs
         env:
-          CONQUEST_PAGES_URL: https://ruan-levi.github.io/Entregavel5-Ambientes/
+          CONQUEST_PAGES_URL: https://ruan-levi.github.io/Entregavel6-Ambientes/
   smoke-nhost:
     name: Conferir Function Nhost
     needs: verify

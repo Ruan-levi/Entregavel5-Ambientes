@@ -1,27 +1,22 @@
-const base=process.env.CONQUEST_PAGES_URL||'https://ruan-levi.github.io/Entregavel5-Ambientes/';
-const pat=/\/Entregavel5-Ambientes\/assets\/[^"' ]+\.js/;
-let last='sem resposta';
-for(let i=0;i<12;i++){
+const base=process.env.CONQUEST_PAGES_URL||'https://ruan-levi.github.io/Entregavel6-Ambientes/';
+const marker=/\/Entregavel6-Ambientes\/assets\/[^"' ]+\.js/;
+let error='sem resposta';
+for(let attempt=1;attempt<=12;attempt++){
  try{
-  const url=new URL(base);url.searchParams.set('check_e5',process.env.GITHUB_SHA||'latest');
-  const res=await fetch(url,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(12000)});
-  const html=await res.text();const match=html.match(pat);
-  if(res.ok&&match&&html.includes('portal-duel-open')&&html.includes('e5-react-open')&&!html.includes('src="/src/main.js"')){
-    const asset=new URL(match[0],url.origin);
-    const r=await fetch(asset,{signal:AbortSignal.timeout(12000)});
-    if(r.ok){
-      const e6url=new URL('entregavel6/',url);
-      const e6=await fetch(e6url,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(12000)});
-      const page=await e6.text();
-      if(e6.ok && page.includes('Os seis ambientes da atividade') && page.includes('id="check-api"')){
-        console.log('Entregáveis 5 e 6 publicados corretamente:',url.href,e6url.href,asset.pathname);
-        process.exit(0);
-      }
-      last='Entregável 6 não publicado corretamente: HTTP '+e6.status;
-    }
-    last='JavaScript HTTP '+r.status;
-  }else last='GitHub Pages serviu HTML bruto/Jekyll ou versão antiga: '+res.status;
- }catch(e){last=e.message;}
- if(i<11)await new Promise(r=>setTimeout(r,5000));
+  const url=new URL(base);url.searchParams.set('verify_e6',process.env.GITHUB_SHA||'latest');
+  const response=await fetch(url,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(12000)});
+  const html=await response.text();const match=html.match(marker);
+  if(response.ok&&match&&html.includes('portal-duel-open')&&html.includes('e5-react-open')&&!html.includes('src="/src/main.js"')){
+   const js=await fetch(new URL(match[0],url.origin),{signal:AbortSignal.timeout(12000)});
+   const demoUrl=new URL('entregavel6/',url);
+   const demo=await fetch(demoUrl,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(12000)});
+   const page=await demo.text();
+   if(js.ok&&demo.ok&&page.includes('Os seis ambientes da atividade')&&page.includes('id="check-api"')){
+    console.log('Entregável 6 independente publicado:',url.href,demoUrl.href);process.exit(0);
+   }
+   error='Arquivos ou pagina E6 ausentes: JavaScript='+js.status+' E6='+demo.status;
+  }else error='HTML do GitHub Pages ainda incorreto: '+response.status;
+ }catch(e){error=e.message;}
+ if(attempt<12)await new Promise(r=>setTimeout(r,5000));
 }
-console.error(last);process.exit(1);
+console.error(error);process.exit(1);
