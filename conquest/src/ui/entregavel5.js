@@ -40,11 +40,10 @@ function App() {
     setRanking(newRanking); setScores(newScores);
   }
   useEffect(() => {
-    const button = document.getElementById('e5-open');
-    if (!button) return;
+    const buttons = ['e5-open', 'e5-sidebar-open'].map(id => document.getElementById(id)).filter(Boolean);
     const clicked = () => { setOpen(true); setMessage(''); };
-    button.addEventListener('click', clicked);
-    return () => button.removeEventListener('click', clicked);
+    buttons.forEach(button => button.addEventListener('click', clicked));
+    return () => buttons.forEach(button => button.removeEventListener('click', clicked));
   }, []);
   useEffect(() => {
     refresh().catch(e => setMessage(e.message));
@@ -102,7 +101,7 @@ function App() {
       h('button',{className:'e5-close',type:'button',onClick:()=>setOpen(false),'aria-label':'Fechar'},'×'),
       h('small',{className:'e5-eyebrow'},'ENTREGÁVEL 5 · AWS EC2'),
       h('h2',null,'Conquest · Meu progresso'),
-      h('p',null,'A jornada 3D pode ser jogada sem login. Crie uma conta aqui para salvar pontuações no SQLite da AWS. Duelos online continuam usando as contas Nhost.'),
+      h('p',null,'A jornada 3D pode ser jogada sem login. Crie uma conta aqui para salvar pontuações no SQLite da AWS. O cadastro e as pontuações são desta aplicação AWS, independentemente do projeto Nhost.'),
       message && h('div',{className:'e5-message',role:'status'},message),
       !user ? h('form',{className:'e5-form',onSubmit:submit},
         h('div',{className:'e5-tabs'},
