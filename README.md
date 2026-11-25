@@ -1,112 +1,101 @@
-# CONQUEST — Entregável 5 | AWS
+# ⚔️ CONQUEST — Entregável 5 | GitHub Pages + Nhost
 
-**Ambientes de Desenvolvimento de Software · UNIFOR**
+**Ambientes de Desenvolvimento de Software · UNIFOR · Jogo 3D educacional**
 
-Este é o repositório da **Entregável 5**, separado do CONQUEST Nuvem (Nhost). Reutilizamos a campanha 3D e acrescentamos **painel React, API REST em Node.js e banco SQLite persistente na AWS EC2**.
+[**🎮 Jogar a Entregável 5**](https://ruan-levi.github.io/Entregavel5-Ambientes/) · [**GitHub Actions**](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions) · [**Painel Nhost**](https://app.nhost.io/) · [**Conquest Nuvem original**](https://github.com/Ruan-levi/Conquest-nuvem)
 
-**[JOGAR CONQUEST NA AWS](http://3.149.254.9/)** · [API e banco](http://3.149.254.9/api/health) · [Ranking](http://3.149.254.9/api/ranking) · [Testes no GitHub Actions](../../actions)
+Esta é uma **cópia independente do jogo CONQUEST Nuvem**, reutilizada e adaptada à Entregável 5. O código 3D original, o frontend, as interações, a autenticação, os duelos, o ranking e as integrações Nhost foram copiados do commit [ea69ceec](https://github.com/Ruan-levi/Conquest-nuvem/commit/ea69ceec1a95b2d5f768bbcd3cef2e81c8339674). **Nenhum arquivo do CONQUEST Nuvem foi alterado.** Foi acrescentado um painel acadêmico React, testes de teclado e um workflow de GitHub Pages próprio.
 
-> A URL da demonstração utiliza HTTP, sem TLS. Use somente contas e senhas fictícias. O IP público não é reservado e pode mudar se a instância for interrompida.
+A versão AWS/SQLite anterior desta disciplina foi substituída na branch `main`, mas permanece recuperável no histórico, até o commit [35d2a34f](https://github.com/Ruan-levi/Entregavel5-Ambientes/commit/35d2a34fcaae24324ec0b802d3b5b21a8aec0bd5). A instância EC2 antiga não é a hospedagem deste novo site.
 
-## Estrutura objetiva para a apresentação
+## Tecnologias reais
+
+| Camada | Tecnologia | Arquivos |
+|---|---|---|
+| Mundo e interações 3D | JavaScript, Babylon.js / WebGL | `src/main.js`, `src/game/` |
+| Página e interface | HTML5 e CSS3 | `index.html`, `src/style.css` |
+| Painel da atividade | React 18 | `src/ui/entregavel5.js`, `src/ui/entregavel5.css` |
+| Cadastro e login | Nhost Auth | `src/services/nhost.js` |
+| Banco e histórico | PostgreSQL + GraphQL (Nhost) | `nhost/migrations/001_conquest_scores.sql` |
+| API REST/Node.js | Nhost Functions, JWT e lógica de duelo | `functions/duel.js` |
+| Ranking / realtime | Function REST, Hasura, WebSocket | `functions/duel.js`, `nhost/migrations/002_conquest_duels.sql` |
+| Storage privado | Nhost Storage | `src/services/nhost.js` |
+| Integração e deploy | Vite, npm, GitHub Actions, GitHub Pages | `.github/workflows/pages.yml` |
+
+**O React é um painel complementar; o jogo em si usa Babylon.js.** O GitHub Pages publica somente arquivos estáticos, e o backend da aplicação executa no Nhost, não no GitHub. A Function de duelo utiliza métodos `GET` (ranking) e `POST` (criação, entrada, status, resposta, cancelamento). O histórico pessoal da jornada utiliza GraphQL.
+
+## Estrutura do projeto para a apresentação
 
 ```text
 Entregavel5-Ambientes/
-├── README.md                     ← Apresentação, links e arquitetura
-├── index.html                    ← Página simples com acesso ao jogo
-├── docs/ROTEIRO_DO_CODIGO.md     ← Ordem dos arquivos para mostrar em aula
-├── .github/workflows/ci.yml     ← Testes e compilação
-└── conquest/                     ← Aplicação completa da Entregável 5
-    ├── index.html                ← Portal, interface e canvas 3D
-    ├── src/
-    │   ├── main.js               ← Controle do jogo, missões e evento de conclusão
-    │   ├── style.css             ← Visual da aventura
-    │   ├── game/
-    │   │   ├── logic.js          ← Vida, movimento, combate e pontuação
-    │   │   ├── scene.js          ← Cenário 3D com Babylon.js
-    │   │   ├── questions.js      ← Perguntas de conjuntos
-    │   │   ├── world-map.js      ← Mapa e progressão
-    │   │   ├── interactions.js   ← Objetos interativos
-    │   │   └── environment/      ← Texturas e cenário
-    │   └── ui/
-    │       ├── entregavel5.js    ← React: cadastro, login, perfil e ranking
-    │       └── entregavel5.css   ← Estilo do painel React
-    ├── server/
-    │   ├── index.mjs             ← API REST Node.js e entrega do frontend
-    │   └── service.mjs           ← SQLite, sessões, senhas e regras
-    ├── tests/                    ← Testes do jogo e da API
-    ├── scripts/live-check.mjs    ← Teste completo da API (grava registros fictícios)
-    ├── docs/                     ← Requisitos, arquitetura, banco e AWS
-    ├── package.json              ← Dependências e comandos
-    └── vite.config.js            ← Configuração Vite
+├── index.html                 # Portal, HUD e canvas 3D
+├── src/
+│   ├── main.js                # Entrada do jogo e controles
+│   ├── style.css              # Visual do jogo
+│   ├── game/                  # Cenas, questões, movimento e batalhas
+│   ├── ui/
+│   │   ├── duel.js            # Duelo de dois jogadores
+│   │   ├── entregavel5.js     # React: login, cadastro, ranking e histórico
+│   │   └── entregavel5.css
+│   └── services/nhost.js      # Auth, GraphQL, REST, Storage e Realtime
+├── functions/
+│   ├── duel.js                # Backend REST que valida duelo e pontuações
+│   └── _shared/               # Questões validadas pelo backend
+├── nhost/migrations/          # SQL PostgreSQL da atividade
+├── tests/                     # Testes do jogo, Nhost e teclado
+├── scripts/                   # Verificação de build e site publicado
+├── docs/                      # Requisitos, Nhost, arquitetura e apresentação
+├── package.json
+├── vite.config.js
+└── .github/workflows/pages.yml  # CI/CD do novo Pages
 ```
 
-**Foram retirados desta entrega** os protótipos Unity, o backend Nhost, scripts Oracle/Portainer, pipelines duplicadas e documentos antigos de outras disciplinas. O CONQUEST Nuvem original não foi alterado.
+## Integração Nhost compartilhada pelos dois repositórios
 
-## Tecnologias
+A Entregável 5 utiliza o **mesmo projeto Nhost** da aplicação original:
 
-| Camada | Tecnologias | Demonstração |
-|---|---|---|
-| Frontend 3D | HTML, CSS, JavaScript e Babylon.js | Jogo, controles, cristais e batalhas |
-| Painel web | React 18 | Cadastro, login, perfil, histórico e ranking |
-| Backend | Node.js 22, HTTP e API REST | GET, POST e PATCH em `server/index.mjs` |
-| Banco | SQLite no volume EBS da AWS | Tabelas `players`, `access_tokens`, `scores` |
-| Hospedagem | Amazon EC2, Amazon Linux, Nginx | Jogo na URL pública |
-| CI | GitHub Actions, Vitest e `node:test` | `npm test` e `npm run build` |
+| Valor público | Configuração |
+|---|---|
+| `VITE_NHOST_SUBDOMAIN` | `xbnokoslfakjqteiyvbu` |
+| `VITE_NHOST_REGION` | `sa-east-1` |
+| Nhost Dashboard | https://app.nhost.io/ |
+| Projeto original | https://ruan-levi.github.io/Conquest-nuvem/ |
+| Entregável 5 | https://ruan-levi.github.io/Entregavel5-Ambientes/ |
 
-**Não usamos Express nesta versão:** as rotas são implementadas com `node:http`. O React é utilizado no painel; o cenário 3D permanece em Babylon.js.
+O pipeline já contém esses valores **públicos** como padrão e permite substituí-los pelas GitHub Actions Variables `NHOST_SUBDOMAIN` e `NHOST_REGION`. Não versionar `NHOST_ADMIN_SECRET` ou outros segredos em `VITE_*`, JavaScript ou HTML.
 
-## Fluxo de dados
+**Conexão à mesma base de dados não é o mesmo que vincular os dois repositórios ao deploy do Nhost.** As Functions e migrações continuam dependentes do projeto Nhost já existente, possivelmente conectado apenas ao repositório original. Para alterar os vínculos de implantação, use o dashboard Nhost e confirme a função `duel` ativa. Não execute de novo migrações já aplicadas.
 
-```text
-Navegador
-  ├─ Babylon.js: jogo, missões e batalhas
-  └─ React: Progresso AWS
-           ↓ fetch('/api/...')
-      Nginx (EC2, porta 80)
-           ↓
-      Node.js (porta interna 4000)
-           ↓
-      API REST e validação de sessão
-           ↓
-      SQLite em EBS (dados persistentes)
-```
+O código da Function permite os dois sites, pois ambos têm a origem `https://ruan-levi.github.io`; no Auth do Nhost, confirme os URLs de redirecionamento necessários para as duas aplicações.
 
-A autenticação própria da Entregável 5 usa usuário e senha; o backend armazena hashes de senha e de tokens, não credenciais em texto puro. O ranking reflete resultados de partidas salvas. O cálculo de pontos do jogo é feito no navegador: esta é uma demonstração acadêmica, não um sistema antifraude.
+## Como demonstrar
 
-## Como demonstrar em aula
+1. Abra [CONQUEST Entregável 5](https://ruan-levi.github.io/Entregavel5-Ambientes/), inicie a jornada e mostre os recursos 3D.
+2. Clique em **Painel React · Nhost** e mostre o formulário de cadastro/login e as consultas de histórico e ranking do Nhost.
+3. Clique em **Minha conta** para mostrar integração original Auth/GraphQL/Storage.
+4. Abra **Duelo online** para demonstrar o serviço REST e a correção no backend, se a Function estiver ativa.
+5. Abra [GitHub Actions](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions) para demonstrar o ciclo automático de teste, compilação e publicação.
+6. Percorra o [roteiro dos códigos](docs/ROTEIRO_DO_CODIGO.md).
 
-1. Abra [o jogo AWS](http://3.149.254.9/) e apresente a campanha 3D.
-2. Clique em **Progresso AWS** para mostrar o painel React.
-3. Entre com uma conta fictícia ou cadastre uma de teste.
-4. Mostre perfil, histórico e ranking.
-5. Abra [a API de saúde](http://3.149.254.9/api/health) e [o ranking público](http://3.149.254.9/api/ranking).
-6. Percorra os arquivos na ordem indicada em [ROTEIRO_DO_CODIGO.md](docs/ROTEIRO_DO_CODIGO.md).
-7. Mostre os [testes automáticos](../../actions) da Entregável 5.
+## Executar localmente
 
-## Testar e executar localmente
+Node.js **22.12+** e npm:
 
 ```bash
 git clone https://github.com/Ruan-levi/Entregavel5-Ambientes.git
-cd Entregavel5-Ambientes/conquest
+cd Entregavel5-Ambientes
 npm ci
 npm test
-npm run build
+cp .env.example .env
+npm run dev
 ```
 
-Para executar **frontend e API juntos**, após compilar, use um banco SQLite persistente:
+Acesse a URL local mostrada pelo Vite. Os dados Nhost públicos estão no `.env.example`; copiar para `.env` ativa a configuração em desenvolvimento. O domínio `localhost:5173` já é aceito na Function de duelo.
 
-```bash
-mkdir -p data
-CONQUEST_DB="$PWD/data/conquest.sqlite" CONQUEST_DIST="$PWD/dist" PORT=4000 node server/index.mjs
-```
+## Publicar pelo GitHub Pages
 
-Acesse `http://127.0.0.1:4000/`. A inicialização somente com `npm run dev` abre o frontend, mas não executa a API REST.
+O pipeline `.github/workflows/pages.yml` compila com o caminho `/Entregavel5-Ambientes/`, roda testes e valida o site publicado. Para eliminar a concorrência do Jekyll, abra [Settings → Pages](https://github.com/Ruan-levi/Entregavel5-Ambientes/settings/pages) e selecione **Build and deployment → Source: GitHub Actions**.
 
-## Publicação AWS e atualizações
+Confira as instruções do [Nhost Auth, banco, Storage e realtime](docs/NHOST.md) e do [duelo + REST](docs/NHOST_DUELOS.md).
 
-A EC2 da demonstração usa **us-east-2 (Ohio)**, Nginx na porta 80, Node.js em loopback e banco SQLite salvo no EBS. **A atualização do servidor AWS ainda é manual:** um push no GitHub dispara os testes, mas não implanta automaticamente o novo código na instância. As alterações de organização feitas aqui **não mudam a versão AWS publicada** até que uma implantação seja realizada.
-
-Documentação: [requisitos](conquest/docs/ENTREGAVEL5.md) · [API e banco](conquest/docs/API_E_BANCO.md) · [arquitetura](conquest/docs/ARQUITETURA_E_CODIGO.md) · [execução AWS](conquest/docs/CONFIGURACAO_E_EXECUCAO.md).
-
-**Observação de segurança:** esta aplicação está em HTTP; não use senhas pessoais nem dados sensíveis na apresentação.
+**Limite acadêmico:** o backend REST atual da Function possui um endpoint `GET` e um endpoint `POST` com diferentes operações de duelo. Caso o professor exija **quatro rotas REST independentes** ou CRUD específico por integrante, ainda será necessário implementar essas rotas. O jogo original completo foi priorizado na cópia e não se deve declarar atendimento a um requisito não demonstrado. O ranking competitivo é calculado no backend; a pontuação da campanha local continua demonstrativa.
