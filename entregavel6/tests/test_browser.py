@@ -4,6 +4,7 @@ import pathlib
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
@@ -70,7 +71,14 @@ class ConquestE6BrowserTests(unittest.TestCase):
 
     def test_04_ranking_rest_publico(self):
         self.driver.get(BASE + "/entregavel6/index.html")
-        self.driver.find_element(By.ID, "check-api").click()
+        button = self.driver.find_element(By.ID, "check-api")
+        # Chrome headless pode interceptar o clique após rolagem em páginas longas.
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", button)
+        try:
+            button.click()
+        except ElementClickInterceptedException:
+            # Aciona o mesmo handler DOM sem ignorar a resposta real do backend.
+            self.driver.execute_script("arguments[0].click();", button)
         wait = WebDriverWait(self.driver, 30)
         result = wait.until(lambda d: d.find_element(By.ID, "api-result").text
                             if "API online" in d.find_element(By.ID, "api-result").text
