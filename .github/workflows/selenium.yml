@@ -36,7 +36,7 @@ jobs:
         run: |
           npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/conquest-vite-e6.log 2>&1 &
           for i in $(seq 1 40); do
-            if curl -fsS http://127.0.0.1:5173/entregavel6/ > /dev/null; then exit 0; fi
+            if curl -fsS http://127.0.0.1:5173/entregavel6/index.html | grep -q "Os seis ambientes da atividade"; then exit 0; fi
             sleep 1
           done
           cat /tmp/conquest-vite-e6.log

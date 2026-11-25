@@ -142,3 +142,5 @@ O usuário pode acessar a API no painel de demonstração da Entregável 6, clic
 - [Plano de testes e evidências](PLANO_TESTES_E6.md)
 - [Figma e critérios de interface](DESIGN_E6.md)
 - [Entregável 5 (base preservada)](ENTREGAVEL5.md)
+
+**Página E6 em desenvolvimento:** com Vite, abra `http://127.0.0.1:5173/entregavel6/index.html`. A URL publicada mantém o endereço limpo `https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/`.

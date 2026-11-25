@@ -50,3 +50,5 @@ Se o Chrome não estiver disponível, instale o navegador ou ajuste o PATH. O Se
 Uma execução verde do Selenium confirma somente os cenários acima. Ela **não prova** que todo jogo 3D foi concluído, que dois jogadores completaram uma disputa, nem que um cadastro com confirmação de e-mail foi efetivado. Esses cenários exigem testes manuais com contas fictícias autorizadas.
 
 Sempre consulte o resultado real da execução. Em caso de falha do ambiente externo, registre a mensagem e reteste sem alterar dados de produção para “forçar” o sucesso.
+
+**Caminhos locais:** em modo `npm run dev`, a página do diretório `public/` pode ser aberta explicitamente em `http://127.0.0.1:5173/entregavel6/index.html`. No GitHub Pages publicado, o caminho legível é `/Entregavel5-Ambientes/entregavel6/`. Os testes E2E usam o primeiro para evitar o fallback do Vite à raiz.

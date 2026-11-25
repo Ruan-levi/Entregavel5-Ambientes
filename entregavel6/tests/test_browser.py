@@ -39,7 +39,7 @@ class ConquestE6BrowserTests(unittest.TestCase):
         self.driver.save_screenshot(str(OUTPUT / (name + ".png")))
 
     def test_01_seis_ambientes_e_links(self):
-        self.driver.get(BASE + "/entregavel6/")
+        self.driver.get(BASE + "/entregavel6/index.html")
         wait = WebDriverWait(self.driver, 20)
         wait.until(lambda d: "Entregável 6" in d.title)
         self.assertEqual(len(self.driver.find_elements(By.CSS_SELECTOR, ".card")), 6)
@@ -69,7 +69,7 @@ class ConquestE6BrowserTests(unittest.TestCase):
         self.assertTrue(self.driver.find_element(By.CSS_SELECTOR, "#entregavel5-react-root input[type=password]"))
 
     def test_04_ranking_rest_publico(self):
-        self.driver.get(BASE + "/entregavel6/")
+        self.driver.get(BASE + "/entregavel6/index.html")
         self.driver.find_element(By.ID, "check-api").click()
         wait = WebDriverWait(self.driver, 30)
         result = wait.until(lambda d: d.find_element(By.ID, "api-result").text
