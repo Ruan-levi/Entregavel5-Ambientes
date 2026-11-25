@@ -9,7 +9,16 @@ for(let i=0;i<12;i++){
   if(res.ok&&match&&html.includes('portal-duel-open')&&html.includes('e5-react-open')&&!html.includes('src="/src/main.js"')){
     const asset=new URL(match[0],url.origin);
     const r=await fetch(asset,{signal:AbortSignal.timeout(12000)});
-    if(r.ok){console.log('Entregável 5 publicado corretamente:',url.href,asset.pathname);process.exit(0);}
+    if(r.ok){
+      const e6url=new URL('entregavel6/',url);
+      const e6=await fetch(e6url,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(12000)});
+      const page=await e6.text();
+      if(e6.ok && page.includes('Os seis ambientes da atividade') && page.includes('id="check-api"')){
+        console.log('Entregáveis 5 e 6 publicados corretamente:',url.href,e6url.href,asset.pathname);
+        process.exit(0);
+      }
+      last='Entregável 6 não publicado corretamente: HTTP '+e6.status;
+    }
     last='JavaScript HTTP '+r.status;
   }else last='GitHub Pages serviu HTML bruto/Jekyll ou versão antiga: '+res.status;
  }catch(e){last=e.message;}
