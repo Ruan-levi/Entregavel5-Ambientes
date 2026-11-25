@@ -23,8 +23,7 @@ export function mountEntregavel5(cloudService){
       const button=document.getElementById('e5-react-open');
       const handler=()=>{setOpen(true);setUser(cloudService.getUser());};
       button?.addEventListener('click',handler);
-      document.documentElement.dataset.conquestReactReady = 'true';
-      return ()=>{ button?.removeEventListener('click',handler); delete document.documentElement.dataset.conquestReactReady; };
+      return ()=>button?.removeEventListener('click',handler);
     },[]);
     useEffect(()=>{
       window.dispatchEvent(new CustomEvent('conquest:react-account',{detail:{open}}));
