@@ -1,18 +1,20 @@
+> **Repositório independente:** este documento faz parte do projeto Entregável 6 preparado para publicação em `Entregavel6-Ambientes`. Até esse repositório ser criado, os links para ele são destinos previstos, não páginas já existentes.
+
 # Entregável 6 — Aplicação Full Stack e Ambientes de Desenvolvimento
 
 **Disciplina:** Ambientes de Desenvolvimento de Software — UNIFOR  
 **Aplicação:** CONQUEST, jogo educativo 3D de Teoria dos Conjuntos  
-**Base reutilizada:** [Entregável 5](../README.md)  
-**Portal da Entregável 6:** https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/  
-**Jogo executável:** https://ruan-levi.github.io/Entregavel5-Ambientes/  
+**Base reutilizada:** [Entregável 5 (repositório independente)](https://github.com/Ruan-levi/Entregavel5-Ambientes)  
+**Portal da Entregável 6:** https://ruan-levi.github.io/Entregavel6-Ambientes/entregavel6/  
+**Jogo executável:** https://ruan-levi.github.io/Entregavel6-Ambientes/  
 **Protótipo Figma:** https://www.figma.com/design/Gir9pqcDf92GYOmacmwmfO  
-**Quadro de trabalho:** https://github.com/Ruan-levi/Entregavel5-Ambientes/issues  
+**Quadro de trabalho:** https://github.com/Ruan-levi/Entregavel6-Ambientes/issues  
 
 ## 1. Objetivo e limites
 
-A atividade solicita conhecer e demonstrar a maior quantidade possível de **ambientes de desenvolvimento**, citando seis categorias: gestão de tarefas, design UI/UX, IDE, banco de dados, testes e servidores/execução. Esta entrega demonstra **seis ambientes distintos, em um único projeto full stack**, com evidências reproduzíveis. Não é um novo jogo: a aplicação funcional da Entregável 5 foi preservada e ampliada por uma apresentação navegável, protótipo, tarefas, configuração de IDE e automação de navegador.
+A atividade solicita conhecer e demonstrar a maior quantidade possível de **ambientes de desenvolvimento**, citando seis categorias: gestão de tarefas, design UI/UX, IDE, banco de dados, testes e servidores/execução. Esta entrega demonstra **seis ambientes distintos, em um único projeto full stack**, com evidências reproduzíveis. Esta Entregável 6 está preparada como **outro repositório**, a partir de uma cópia do código do jogo da Entregável 5. A quinta entrega continua com seu próprio repositório, código e Pages. A sexta possui configuração de Pages, README, apresentação, protótipo e testes próprios.
 
-O código original do [CONQUEST Nuvem](https://github.com/Ruan-levi/Conquest-nuvem) não foi modificado. O frontend e os recursos Nhost da Entregável 5 continuam disponíveis na mesma URL.
+O código original do [CONQUEST Nuvem](https://github.com/Ruan-levi/Conquest-nuvem) não foi modificado. Os dois projetos terão endereços próprios do GitHub Pages, mas compartilham intencionalmente o mesmo backend Nhost. O endereço da E6 será publicado após a criação do novo repositório.
 
 ## 2. O que caracteriza a aplicação como full stack?
 
@@ -35,26 +37,20 @@ O código original do [CONQUEST Nuvem](https://github.com/Ruan-levi/Conquest-nuv
 
 | Nº | Categoria do enunciado | Ambiente selecionado | Aplicação/evidência | Status de implementação |
 |---:|---|---|---|---|
-| 1 | Gestão de tarefas | **GitHub Issues** | [Issues #4 a #9](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues) | Quadro criado; atribuição aos integrantes precisa ser feita pela equipe |
+| 1 | Gestão de tarefas | **GitHub Issues** | [Plano de gestão da E6](GESTAO_E6.md) | Quadro criado; atribuição aos integrantes precisa ser feita pela equipe |
 | 2 | Design de interface | **Figma** | [Pranchas editáveis](https://www.figma.com/design/Gir9pqcDf92GYOmacmwmfO) | Portal, login e arquitetura desenhados |
 | 3 | Desenvolvimento / IDE | **Visual Studio Code** | [`.vscode/`](../.vscode) com tarefas e extensões | Workspace versionado; edição efetiva no PC deve ser demonstrada |
 | 4 | Gerenciamento de banco | **Nhost Dashboard + Hasura** | [Nhost](https://app.nhost.io/), [migrações](../nhost/migrations/) | PostgreSQL e SQL existentes; visualização interna requer conta Nhost |
 | 5 | Testes de interface | **Selenium + Chrome WebDriver** | [Testes Python](../entregavel6/tests/test_browser.py), [workflow](../.github/workflows/selenium.yml) | CI executa casos de navegação e formulário; ver relatório atual |
-| 6 | Execução e servidores web | **GitHub Pages + Nhost Functions** | [Jogo](https://ruan-levi.github.io/Entregavel5-Ambientes/), [apresentação](https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/) | Publicação HTTPS por GitHub Actions; verificar execução do workflow |
+| 6 | Execução e servidores web | **GitHub Pages + Nhost Functions** | [Jogo](https://ruan-levi.github.io/Entregavel6-Ambientes/), [apresentação](https://ruan-levi.github.io/Entregavel6-Ambientes/entregavel6/) | Publicação HTTPS por GitHub Actions; verificar execução do workflow |
 
 O GitHub Issues foi escolhido como **ambiente real de gestão de trabalho**, em vez de afirmar uso de Trello, Jira ou ClickUp sem ter um quadro criado. A aplicação também utiliza Git/GitHub para versionamento, Vite para desenvolvimento e Vitest/`node:test` para testes de unidade.
 
 ## 4. Ambiente de gestão: GitHub Issues
 
-Tarefas planejadas:
-- [#4 · Gestão](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues/4)
-- [#5 · Design](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues/5)
-- [#6 · Desenvolvimento](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues/6)
-- [#7 · Banco](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues/7)
-- [#8 · Testes](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues/8)
-- [#9 · Hospedagem](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues/9)
+Para não misturar as entregas, as Issues da Entregável 6 devem ser abertas **no repositório novo**, após sua criação. O planejamento e os critérios de aceite já estão no [plano de gestão](GESTAO_E6.md). As antigas Issues #4 a #9 do repositório E5 são parte do histórico de organização anterior e não devem ser apresentadas como tarefas ativas da sexta entrega.
 
-Cada issue descreve objetivo, tarefas, evidências e pendências. Para uma demonstração completa, os integrantes devem **atribuir responsáveis** e marcar o que foi de fato concluído; não declarar etapas manuais como finalizadas antes da checagem.
+**Situação:** planejamento documentado; criação e atribuição de Issues no futuro repositório E6 ainda pendentes.
 
 ## 5. Ambiente de design: Figma
 
@@ -77,7 +73,7 @@ Workspace versionado em `.vscode/`:
 Para executar no VS Code:
 
 ```bash
-git clone https://github.com/Ruan-levi/Entregavel5-Ambientes.git
+git clone https://github.com/Ruan-levi/Entregavel6-Ambientes.git
 cd Entregavel5-Ambientes
 npm ci
 cp .env.example .env
@@ -123,7 +119,7 @@ Requer Chrome/Chromedriver instalados ou resolvidos pelo Selenium Manager. Os te
 
 ## 9. Ambiente de execução e servidores
 
-GitHub Actions executa `npm ci`, `npm test`, Vite build e publica `dist/` no GitHub Pages. A URL principal é `/Entregavel5-Ambientes/`; a página acadêmica fica em `/Entregavel5-Ambientes/entregavel6/`. O workflow faz uma consulta pública final à publicação.
+GitHub Actions executa `npm ci`, `npm test`, Vite build e publica `dist/` no GitHub Pages. A URL principal é `/Entregavel6-Ambientes/`; a página acadêmica fica em `/Entregavel6-Ambientes/entregavel6/`. O workflow faz uma consulta pública final à publicação.
 
 O usuário pode acessar a API no painel de demonstração da Entregável 6, clicar em **Consultar API agora** e ver o resultado retornado pela Function Nhost. Esse botão **não escreve no banco**, apenas lê o ranking público validado pela API.
 
@@ -143,4 +139,4 @@ O usuário pode acessar a API no painel de demonstração da Entregável 6, clic
 - [Figma e critérios de interface](DESIGN_E6.md)
 - [Entregável 5 (base preservada)](ENTREGAVEL5.md)
 
-**Página E6 em desenvolvimento:** com Vite, abra `http://127.0.0.1:5173/entregavel6/index.html`. A URL publicada mantém o endereço limpo `https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/`.
+**Página E6 em desenvolvimento:** com Vite, abra `http://127.0.0.1:5173/entregavel6/index.html`. A URL publicada mantém o endereço limpo `https://ruan-levi.github.io/Entregavel6-Ambientes/entregavel6/`.

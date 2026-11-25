@@ -16,7 +16,7 @@
                  |
         [GitHub Pages - HTTPS]
           /                \
- /Entregavel5-Ambientes/   /Entregavel5-Ambientes/entregavel6/
+ /Entregavel6-Ambientes/   /Entregavel6-Ambientes/entregavel6/
  [Portal CONQUEST 3D]      [Mostra seis ambientes + botão GET API]
  [React conta/Ranking]
           |
@@ -69,4 +69,4 @@
 
 O workflow instala Node.js 22, Python 3.12, Chrome e chromedriver; executa `npm ci` e o build; inicia Vite em `localhost:5173`; roda Python Selenium; grava capturas de tela; anexa screenshots aos artefatos Actions.
 
-A verificação do Pages confirma o jogo e a página E6 após o deploy. A verificação da Function Nhost consulta o ranking público sem segredo.
+A verificação do Pages, quando o repositório E6 for criado, confirmará o jogo E6 e a página /entregavel6/ no domínio próprio; o E5 continua em outro endereço. A verificação da Function Nhost consulta o ranking público sem segredo.

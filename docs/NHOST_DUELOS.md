@@ -66,7 +66,7 @@ Para deploy em domínio próprio/Oracle, acrescente o domínio completo a `CONQU
 
 ## 4. Testar com duas contas
 
-1. Abra o [CONQUEST no GitHub Pages](https://ruan-levi.github.io/Entregavel5-Ambientes/) em duas janelas independentes, uma normal e outra anônima.
+1. Abra o [CONQUEST no GitHub Pages](https://ruan-levi.github.io/Entregavel6-Ambientes/) em duas janelas independentes, uma normal e outra anônima.
 2. Em cada janela, clique em **Entrar / Cadastrar** e entre com **contas diferentes** do mesmo projeto Nhost.
 3. Na primeira janela, abra **Duelo online → JOGAR**, defina um apelido e clique em **Criar sala**.
 4. Copie o código de oito caracteres e informe-o na segunda janela em **Entrar no duelo**.

@@ -4,15 +4,15 @@
 
 | Tempo | Demonstração | O que explicar |
 |---|---|---|
-| 0:00–0:50 | [Portal E6](https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/) | “Reaproveitamos o CONQUEST da Entregável 5 para estudar os seis ambientes da disciplina.” |
-| 0:50–1:40 | [GitHub Issues](https://github.com/Ruan-levi/Entregavel5-Ambientes/issues) | Gestão de tarefas por assunto, responsáveis e acompanhamento. Mostrar #4–#9. |
+| 0:00–0:50 | [Portal E6](https://ruan-levi.github.io/Entregavel6-Ambientes/entregavel6/) | “Reaproveitamos o CONQUEST da Entregável 5 para estudar os seis ambientes da disciplina.” |
+| 0:50–1:40 | [GitHub Issues](https://github.com/Ruan-levi/Entregavel6-Ambientes/issues) | Gestão de tarefas por assunto, responsáveis e acompanhamento. Mostrar as tarefas criadas no novo repositório E6 depois da migração. |
 | 1:40–2:25 | [Figma](https://www.figma.com/design/Gir9pqcDf92GYOmacmwmfO) | Protótipo com telas editáveis, proposta visual, interface de conta e desenho da arquitetura. |
 | 2:25–3:20 | VS Code e `.vscode/tasks.json` | IDE de desenvolvimento. Mostrar arquivos `src/`, `functions/`, `nhost/` e tarefas `npm test` e `npm run build`. |
 | 3:20–4:20 | [Nhost Dashboard](https://app.nhost.io/) | Auth, PostgreSQL/Hasura, tabela de pontuação, tabela de duelos e view do ranking; não mostrar dados privados. |
-| 4:20–5:25 | [GitHub Actions](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions) | Selenium automatiza navegador, testes unitários e capturas de tela. Abrir a execução recente e verificar seu resultado real. |
-| 5:25–6:15 | [Jogo completo](https://ruan-levi.github.io/Entregavel5-Ambientes/) | Jogar: cenário 3D Babylon.js, perguntas de conjuntos, controles e painel React de contas. |
-| 6:15–7:10 | [Demonstração de API REST](https://ruan-levi.github.io/Entregavel5-Ambientes/entregavel6/) | Clicar em “Consultar API agora”. Explicar GET na Function e resposta JSON em ranking público. |
-| 7:10–8:00 | [Repositório](https://github.com/Ruan-levi/Entregavel5-Ambientes) | Concluir: frontend no Pages, backend Auth/REST e banco PostgreSQL no Nhost; GitHub Actions publica e testa. |
+| 4:20–5:25 | [GitHub Actions](https://github.com/Ruan-levi/Entregavel6-Ambientes/actions) | Selenium automatiza navegador, testes unitários e capturas de tela. Abrir a execução recente e verificar seu resultado real. |
+| 5:25–6:15 | [Jogo completo](https://ruan-levi.github.io/Entregavel6-Ambientes/) | Jogar: cenário 3D Babylon.js, perguntas de conjuntos, controles e painel React de contas. |
+| 6:15–7:10 | [Demonstração de API REST](https://ruan-levi.github.io/Entregavel6-Ambientes/entregavel6/) | Clicar em “Consultar API agora”. Explicar GET na Function e resposta JSON em ranking público. |
+| 7:10–8:00 | [Repositório](https://github.com/Ruan-levi/Entregavel6-Ambientes) | Concluir: frontend no Pages, backend Auth/REST e banco PostgreSQL no Nhost; GitHub Actions publica e testa. |
 
 ## Falas de referência — linguagem simples
 

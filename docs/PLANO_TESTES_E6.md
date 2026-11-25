@@ -16,9 +16,9 @@
 
 ## Como consultar evidências
 
-Acesse [GitHub Actions](https://github.com/Ruan-levi/Entregavel5-Ambientes/actions). Abra o workflow **CONQUEST Entregável 6 - Testes Selenium (Chrome)**; no job de E2E, veja os casos passados ou com falha. Na seção **Artifacts**, procure `entregavel6-evidencias-selenium`: capturas da página, do jogo, do formulário e do ranking, caso o navegador tenha iniciado.
+Acesse [GitHub Actions](https://github.com/Ruan-levi/Entregavel6-Ambientes/actions). Abra o workflow **CONQUEST Entregável 6 - Testes Selenium (Chrome)**; no job de E2E, veja os casos passados ou com falha. Na seção **Artifacts**, procure `entregavel6-evidencias-selenium`: capturas da página, do jogo, do formulário e do ranking, caso o navegador tenha iniciado.
 
-O workflow principal [CONQUEST Entregável 5 - Nhost e GitHub Pages](../.github/workflows/pages.yml) continua responsável pela build, publicação e verificação do Pages. Os testes automatizados Selenium **não criam usuários reais** nem expõem dados pessoais.
+O workflow próprio da E6 [CONQUEST Entregável 6 - Nhost e GitHub Pages](../.github/workflows/pages.yml) continua responsável pela build, publicação e verificação do Pages. Os testes automatizados Selenium **não criam usuários reais** nem expõem dados pessoais.
 
 ## Executar localmente
 
@@ -51,4 +51,4 @@ Uma execução verde do Selenium confirma somente os cenários acima. Ela **não
 
 Sempre consulte o resultado real da execução. Em caso de falha do ambiente externo, registre a mensagem e reteste sem alterar dados de produção para “forçar” o sucesso.
 
-**Caminhos locais:** em modo `npm run dev`, a página do diretório `public/` pode ser aberta explicitamente em `http://127.0.0.1:5173/entregavel6/index.html`. No GitHub Pages publicado, o caminho legível é `/Entregavel5-Ambientes/entregavel6/`. Os testes E2E usam o primeiro para evitar o fallback do Vite à raiz.
+**Caminhos locais:** em modo `npm run dev`, a página do diretório `public/` pode ser aberta explicitamente em `http://127.0.0.1:5173/entregavel6/index.html`. No GitHub Pages publicado, o caminho legível é `/Entregavel6-Ambientes/entregavel6/`. Os testes E2E usam o primeiro para evitar o fallback do Vite à raiz.

@@ -23,4 +23,4 @@ O Figma guarda três quadros com elementos editáveis:
 
 ## Como demonstrar em aula
 
-Abra o arquivo, selecione os quadros e mostre que o conteúdo é editável. Compare o portal conceitual com o [jogo publicado](https://ruan-levi.github.io/Entregavel5-Ambientes/). Depois use a apresentação da E6 para expor o fluxo full stack que conecta frontend, servidor e banco.
+Abra o arquivo, selecione os quadros e mostre que o conteúdo é editável. Compare o portal conceitual com o [jogo publicado](https://ruan-levi.github.io/Entregavel6-Ambientes/). Depois use a apresentação da E6 para expor o fluxo full stack que conecta frontend, servidor e banco.
