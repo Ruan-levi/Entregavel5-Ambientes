@@ -66,7 +66,7 @@ export function mountEntregavel5(cloudService){
       finally{setBusy(false);}
     }
     if(!open)return null;
-    return h('div',{className:'e5-backdrop',role:'dialog','aria-modal':'true','aria-label':'Progresso Nhost Entregável 5'},
+    return h('div',{className:'e5-backdrop',role:'dialog','aria-modal':'true','aria-label':'Progresso Nhost Entregável 6'},
       h('div',{className:'e5-modal'},
         h('button',{className:'e5-close',type:'button',onClick:()=>setOpen(false),'aria-label':'Fechar'},'×'),
         h('small',{className:'e5-eyebrow'},'ENTREGÁVEL 5 · GITHUB PAGES + NHOST'),
