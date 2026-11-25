@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 export default defineConfig(({ command, mode }) => ({
-  base: process.env.GITHUB_PAGES === "true" ? "/Conquest-nuvem/" : "/",
+  base: process.env.GITHUB_PAGES === "true" ? "/Entregavel5-Ambientes/" : "/",
   server: { host: "0.0.0.0" },
   build: {
     target: "es2022",
