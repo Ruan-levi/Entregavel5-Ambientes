@@ -4,8 +4,6 @@ import { createWorld } from "./game/scene.js";
 import { createGameState, interact, acceptLioraQuest, getBattleQuestion, answerQuestion, canInteract, stageLabel, makeResult } from "./game/logic.js";
 import { currentTarget, distance2D } from "./game/world-map.js";
 import { nearbyScenicSpot, inspectScenicSpot } from "./game/interactions.js";
-import { cloudService } from "./services/nhost.js";
-import { initDuelUI } from "./ui/duel.js";
 
 const $ = (id) => document.getElementById(id);
 const keys = Object.create(null);
@@ -20,12 +18,10 @@ let audioContext = null;
 let lastTime = 0;
 let hudTime = 0;
 let toastTimeout = 0;
-let stopCloudRealtime = null;
-let cloudConnectionVersion = 0;
 const ui = {
   intro: $("intro-overlay"), hud: $("hud-left"), objective: $("objective-panel"),
   dialogue: $("dialogue-overlay"), battle: $("battle-overlay"), end: $("end-overlay"),
-  pause: $("pause-overlay"), cloud: $("cloud-modal"), controls: $("controls-hint"),
+  pause: $("pause-overlay"), controls: $("controls-hint"),
   mobile: $("mobile-controls")
 };
 const isTouch = matchMedia("(pointer:coarse)").matches || innerWidth < 900;
@@ -71,11 +67,9 @@ function returnToPortal() {
   paused = false;
   battleBusy = false;
   Object.keys(keys).forEach((key) => { keys[key] = false; });
-  closeCloudModal();
   for (const el of [ui.dialogue, ui.battle, ui.end, ui.pause, ui.hud, ui.objective, ui.controls, ui.mobile, $("interaction-prompt"), $("toast")]) toggle(el, false);
   toggle(ui.intro, true);
   ui.intro.scrollTop = 0;
-  refreshPortalRanking();
 }
 function updateHud() {
   $("health-text").textContent = state.health + " / 100";
@@ -94,7 +88,7 @@ function updateHud() {
     $("direction-arrow").style.transform = "rotate(" + world.directionAngle(state) + "rad)";
   }
   const canAct = started && !paused && !state.battle && !isVisible(ui.dialogue) &&
-    !isVisible(ui.cloud) && !isVisible(ui.end);
+    !isVisible(ui.end);
   const near = canAct && (canInteract(state) || nearbyScenicSpot(state.position));
   toggle($("interaction-prompt"), Boolean(near));
   if (near) $("interaction-text").textContent = (near.action || "Explorar") + " · " + near.label;
@@ -139,7 +133,7 @@ function showEnd(won) {
     : "Os desafios foram difíceis, mas cada tentativa ajuda você a aprender os conjuntos.";
   $("end-score").textContent = state.score.toLocaleString("pt-BR");
   $("end-correct").textContent = String(state.correct);
-  $("cloud-save-message").textContent = "Resultado salvo localmente neste navegador.";
+  $("cloud-save-message").textContent = "Resultado concluído. Para salvar na AWS, entre em Progresso AWS antes de iniciar a aventura.";
   const result = makeResult(state);
   window.dispatchEvent(new CustomEvent('conquest:finished', {detail:{score:result.score,correct:result.correct_answers,finished:result.completed}}));
   try {
@@ -147,13 +141,8 @@ function showEnd(won) {
     const next = [...old, result].sort((a,b) => b.score - a.score).slice(0, 15);
     localStorage.setItem("conquest-local-scores", JSON.stringify(next));
   } catch (_) { $("cloud-save-message").textContent = "Não foi possível utilizar o armazenamento local."; }
-  if (won) {
-    sound(720, .26, "sine");
-    cloudService.saveScore(result).then((res) => {
-      if (res.saved) $("cloud-save-message").textContent = "Pontuação registrada no Nhost (versão experimental).";
-      else if (res.reason) $("cloud-save-message").textContent += " Nuvem: " + res.reason;
-    }).catch(() => {});
-  } else sound(220, .25, "triangle");
+  if (won) sound(720, .26, "sine");
+  else sound(220, .25, "triangle");
 }
 function chooseAnswer(index) {
   if (!state.battle || battleBusy) return;
@@ -185,7 +174,7 @@ function chooseAnswer(index) {
   }, 900);
 }
 function interactNow() {
-  if (!started || paused || state.battle || isVisible(ui.end) || isVisible(ui.cloud) || isVisible(ui.dialogue)) return;
+  if (!started || paused || state.battle || isVisible(ui.end) || isVisible(ui.dialogue)) return;
   const action = interact(state);
   if (action.type === "dialogue") {
     toggle(ui.dialogue, true);
@@ -213,14 +202,10 @@ function setPaused(value) {
   Object.keys(keys).forEach(k => keys[k] = false);
 }
 function onKeyDown(event) {
-  if (isVisible(ui.cloud) && ["INPUT","TEXTAREA"].includes(document.activeElement?.tagName || "")) return;
+  if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName || "")) return;
   const k = event.key.toLowerCase();
   if (["w","a","s","d","shift","e","q","r","arrowup","arrowdown","arrowleft","arrowright","escape","1","2","3","4"].includes(k)) event.preventDefault();
   if (k === "escape") {
-    if (isVisible(ui.cloud)) {
-      closeCloudModal();
-      return;
-    }
     if (isVisible(ui.battle)) return;
     return setPaused(!paused);
   }
@@ -279,193 +264,13 @@ $("audio-button").addEventListener("click", () => {
   if (effectsEnabled) sound(500, .08);
 });
 
-function stopLiveScores() {
-  cloudConnectionVersion++;
-  if (stopCloudRealtime) stopCloudRealtime();
-  stopCloudRealtime = null;
-}
-function closeCloudModal() {
-  stopLiveScores();
-  toggle(ui.cloud, false);
-}
-function renderCloudScores(scores) {
-  const list = $("cloud-score-list");
-  list.replaceChildren();
-  if (!scores.length) {
-    const item = document.createElement("li");
-    item.textContent = "Ainda nao ha partidas sincronizadas nesta conta.";
-    list.append(item);
-    return;
-  }
-  scores.forEach((score) => {
-    const item = document.createElement("li");
-    const date = new Date(score.created_at).toLocaleDateString("pt-BR");
-    item.textContent = date + " · " + score.score + " pts · " +
-      score.correct_answers + "/" + score.total_answers + " acertos" +
-      (score.completed ? " · Vitoria" : "");
-    list.append(item);
-  });
-}
-async function refreshCloudScores() {
-  try {
-    renderCloudScores(await cloudService.getOwnScores());
-  } catch (error) {
-    $("cloud-realtime-status").textContent = "Consulta indisponivel: " + (error.message || "falha GraphQL");
-  }
-}
-async function startLiveScores() {
-  stopLiveScores();
-  if (!cloudService.getUser() || !isVisible(ui.cloud)) return;
-  const version = cloudConnectionVersion;
-  await refreshCloudScores();
-  try {
-    const stop = await cloudService.subscribeOwnScores(
-      (scores) => { if (cloudConnectionVersion === version) renderCloudScores(scores); },
-      (message) => { if (cloudConnectionVersion === version) $("cloud-realtime-status").textContent = message; }
-    );
-    if (cloudConnectionVersion !== version || !isVisible(ui.cloud)) stop();
-    else stopCloudRealtime = stop;
-  } catch (error) {
-    if (cloudConnectionVersion === version) {
-      $("cloud-realtime-status").textContent = "Realtime indisponivel: " + (error.message || "verifique o Nhost");
-    }
-  }
-}
-function updateCloudUser() {
-  const user = cloudService.getUser();
-  toggle($("cloud-user"), Boolean(user));
-  toggle($("cloud-login-form"), !user && cloudService.isConfigured());
-  toggle($("cloud-dashboard"), Boolean(user));
-  if (user) $("cloud-user-name").textContent = "Conectado: " + (user.email || user.id);
-  $("cloud-status").textContent = user ? "● Nhost conectado" : (cloudService.isConfigured() ? "● Nhost configurado" : "● Modo local");
-  $("portal-account-status").textContent = user ? "✦ " + (user.email || "Explorador conectado") : "Explorador visitante";
-  $("portal-account-open").textContent = user ? "Minha conta" : "Entrar / Cadastrar";
-  refreshPortalRanking();
-}
-let portalRankingRequest = 0;
-async function refreshPortalRanking() {
-  const request = ++portalRankingRequest;
-  const list = $("portal-ranking-list");
-  const status = $("portal-ranking-status");
-  list.replaceChildren();
-  const addItem = (message) => {
-    const item = document.createElement("li");
-    item.textContent = message;
-    list.append(item);
-  };
-  if (!cloudService.isConfigured()) {
-    addItem("Ranking disponível após configurar o projeto Nhost.");
-    status.textContent = "A aventura 3D continua disponível sem conexão.";
-    return;
-  }
-  status.textContent = "Consultando o ranking global verificado no Nhost…";
-  try {
-    const ranking = await cloudService.getGlobalLeaderboard();
-    if (request !== portalRankingRequest) return;
-    if (!ranking.length) addItem("Ainda não há duelos concluídos pelos dois jogadores.");
-    ranking.forEach((player, index) => {
-      const item = document.createElement("li");
-      const position = document.createElement("span");
-      position.className = "portal-rank-position";
-      position.textContent = String(index + 1).padStart(2, "0");
-      const username = document.createElement("span");
-      username.className = "portal-rank-player";
-      username.textContent = player.nickname + " · " + player.wins + " vitórias";
-      const points = document.createElement("strong");
-      points.textContent = Number(player.bestScore).toLocaleString("pt-BR") + " pts";
-      item.append(position, username, points);
-      list.append(item);
-    });
-    status.textContent = "Ranking dos duelos corrigidos no servidor. Atualização em tempo real e consulta automática.";
-  } catch (error) {
-    if (request !== portalRankingRequest) return;
-    addItem("Ranking ainda indisponível neste projeto Nhost.");
-    status.textContent = "Publique a Function duel e aplique a migração 002; detalhes em docs/NHOST.md.";
-  }
-}
-initDuelUI(cloudService);
-if (cloudService.isConfigured()) {
-  window.setInterval(() => {
-    if (isVisible(ui.intro) && !document.hidden) refreshPortalRanking();
-  }, 10000);
-  cloudService.subscribeGlobalLeaderboard(refreshPortalRanking).catch(() => {
-    /* Consulta automática a cada dez segundos mantém o ranking disponível. */
-  });
-}
-for (const id of ["portal-account-open", "portal-cloud-open"]) {
-  $(id).addEventListener("click", () => $("cloud-open").click());
-}
-$("portal-ranking-refresh").addEventListener("click", refreshPortalRanking);
-$("cloud-open").addEventListener("click", async () => {
-  toggle(ui.cloud, true);
-  const enabled = cloudService.isConfigured();
-  $("cloud-project").textContent = enabled ? "Projeto Nhost usado pelo jogo: " + cloudService.projectLabel() : "Projeto Nhost não definido neste build.";
-  $("cloud-description").textContent = enabled
-    ? "Sua conta, partidas sincronizadas e comprovantes privados no Nhost. Pontos calculados no navegador sao demonstrativos."
-    : "Nhost nao configurado. Defina VITE_NHOST_SUBDOMAIN e VITE_NHOST_REGION e publique novamente.";
-  $("cloud-message").textContent = enabled ? "Os dados dependem das permissoes configuradas no Nhost." : "O jogo funciona localmente sem cadastro.";
-  try { await cloudService.initialize(); } catch (error) {
-    $("cloud-message").textContent = error.message || "Nao foi possivel iniciar o Nhost.";
-  }
-  if (!isVisible(ui.cloud)) return;
-  updateCloudUser();
-  if (cloudService.getUser()) startLiveScores();
-});
-$("close-cloud").addEventListener("click", closeCloudModal);
-$("cloud-login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  $("cloud-message").textContent = "Entrando...";
-  try {
-    const result = await cloudService.login($("cloud-email").value, $("cloud-password").value);
-    $("cloud-password").value = "";
-    $("cloud-message").textContent = result;
-    updateCloudUser();
-    startLiveScores();
-  } catch (error) { $("cloud-message").textContent = error.message || "Falha no login."; }
-});
-$("cloud-register").addEventListener("click", async () => {
-  $("cloud-message").textContent = "Criando conta...";
-  try {
-    const result = await cloudService.register($("cloud-email").value, $("cloud-password").value);
-    $("cloud-message").textContent = result;
-    updateCloudUser();
-    if (cloudService.getUser()) startLiveScores();
-  } catch (error) { $("cloud-message").textContent = error.message || "Nao foi possivel criar a conta."; }
-});
-$("cloud-logout").addEventListener("click", async () => {
-  stopLiveScores();
-  try {
-    await cloudService.logout();
-    $("cloud-message").textContent = "Sessao encerrada.";
-    renderCloudScores([]);
-  } catch (error) {
-    $("cloud-message").textContent = "Falha ao desconectar: " + (error.message || "erro");
-  }
-  updateCloudUser();
-});
-$("cloud-refresh-scores").addEventListener("click", refreshCloudScores);
-$("cloud-upload-proof").addEventListener("click", async () => {
-  const button = $("cloud-upload-proof");
-  const file = $("cloud-proof").files[0];
-  button.disabled = true;
-  $("cloud-storage-status").textContent = "Enviando arquivo privado...";
-  try {
-    const fileId = await cloudService.uploadProof(file);
-    $("cloud-storage-status").textContent = "Upload concluido no bucket personal. ID: " + fileId;
-    $("cloud-proof").value = "";
-  } catch (error) {
-    $("cloud-storage-status").textContent = "Falha no upload: " + (error.message || "erro");
-  } finally { button.disabled = false; }
-});
-cloudService.initialize().then(updateCloudUser).catch(() => { /* Modo local permanece acessivel. */ });
-
 try {
   world = createWorld(canvas, interactNow);
   const animate = (timestamp) => {
     const dt = lastTime ? Math.min((timestamp - lastTime) / 1000, .05) : .016;
     lastTime = timestamp;
     const active = started && !paused && !state.battle &&
-      !isVisible(ui.dialogue) && !isVisible(ui.cloud) && !isVisible(ui.end);
+      !isVisible(ui.dialogue) && !isVisible(ui.end);
     world.update(state, dt, keys, active);
     if (timestamp - hudTime > 95) {
       updateHud();

@@ -14,7 +14,7 @@
   <header class="game-header">
     <div class="brand"><span class="brand-icon">✦</span><div><b>CONQUEST</b><small>VALE DOS CONJUNTOS</small></div></div>
     <div class="header-actions">
-      <span id="cloud-status" class="cloud-chip">● Modo local</span>
+      <span id="cloud-status" class="cloud-chip">☁ AWS EC2 + SQLite</span>
       <button class="icon-button" id="audio-button" title="Ligar ou desligar efeitos de som" aria-label="Alternar som">♫</button>
       <button class="icon-button" id="pause-button" title="Pausar" aria-label="Pausar">Ⅱ</button>
     </div>
@@ -53,8 +53,7 @@
       <nav class="portal-navigation" aria-label="Navegação da página inicial">
         <div class="portal-logo"><span>✦</span><div><strong>CONQUEST</strong><small>A JORNADA DOS CONJUNTOS</small></div></div>
         <div class="portal-nav-actions">
-          <span id="portal-account-status" class="portal-account-status">Explorador visitante</span>
-          <button id="portal-account-open" type="button" class="portal-ghost-button">Entrar / Cadastrar</button>
+          <span id="portal-account-status" class="portal-account-status">Entregável 5 · AWS</span>
         </div>
       </nav>
       <main class="portal-grid">
@@ -67,31 +66,28 @@
           <div class="portal-cta-row">
             <button id="start-button" class="primary-button">INICIAR AVENTURA <span>➜</span></button>
             <button id="e5-open" type="button" title="Conta, histórico e ranking na AWS">☁ Progresso AWS</button>
-            <button id="portal-cloud-open" type="button" class="portal-ghost-button">☁ Minha conta</button>
           </div>
-          <p class="portal-guest-note">Você pode jogar sem conta. Se o Nhost estiver configurado, entre para salvar e consultar seu histórico de partidas.</p>
+          <p class="portal-guest-note">Você pode explorar o Vale sem login. Para salvar resultados no SQLite da AWS, entre em Progresso AWS antes de iniciar a jornada.</p>
           <div class="portal-journey"><span><b>01</b> Conheça Liora</span><span><b>02</b> Reúna 3 cristais</span><span><b>03</b> Enfrente os guardiões</span><span><b>04</b> Desafie Cael</span></div>
           <div class="intro-help">WASD para mover · Shift para correr · E para interagir · Q/R para câmera</div>
         </section>
-        <aside class="portal-sidebar" aria-label="Ranking e modos de jogo">
+        <aside class="portal-sidebar" aria-label="Recursos da versão AWS">
           <section class="portal-card" aria-labelledby="portal-ranking-title">
             <div class="portal-card-heading">
-              <div><small class="eyebrow">COMPETIÇÃO ONLINE</small><h2 id="portal-ranking-title">🏆 Ranking global</h2></div>
-              <button id="portal-ranking-refresh" class="portal-small-button" type="button" aria-label="Atualizar ranking">↻</button>
+              <div><small class="eyebrow">ENTREGÁVEL 5 · AWS EC2</small><h2 id="portal-ranking-title">☁ Progresso na nuvem</h2></div>
             </div>
-            <ol id="portal-ranking-list" class="portal-ranking-list" aria-live="polite"><li>Carregando ranking global verificado…</li></ol>
-            <p id="portal-ranking-status" class="portal-status">Apenas partidas online concluídas pelos dois participantes entram na classificação.</p>
+            <p class="portal-status">Crie sua conta, veja o histórico e consulte o ranking salvo no SQLite da AWS.</p>
+            <button id="e5-sidebar-open" class="portal-mode-link" type="button">ABRIR MEU PROGRESSO</button>
           </section>
-          <section class="portal-card portal-modes" aria-labelledby="portal-modes-title">
-            <small class="eyebrow">ESCOLHA COMO JOGAR</small>
-            <h2 id="portal-modes-title">Modos de aventura</h2>
-            <div class="portal-mode"><span class="portal-mode-symbol">⚔</span><div><strong>Jornada 3D</strong><small>Explore o Vale, resolva desafios e enfrente Cael.</small></div><span class="portal-mode-tag">Disponível</span></div>
-            <div class="portal-mode"><span class="portal-mode-symbol">✦</span><div><strong>Duelo online</strong><small>Convide um amigo por código e disputem seis perguntas corrigidas no Nhost.</small></div><button id="portal-duel-open" type="button" class="portal-mode-link">JOGAR</button></div>
-            <p class="portal-status">É necessário entrar em uma conta Nhost para participar. A jornada 3D continua disponível sem login.</p>
+          <section class="portal-card portal-modes">
+            <small class="eyebrow">APRENDA JOGANDO</small>
+            <h2>Como funciona a aventura</h2>
+            <div class="portal-mode"><span class="portal-mode-symbol">⚔</span><div><strong>Jornada 3D</strong><small>Explore, encontre cristais e resolva desafios de conjuntos.</small></div><span class="portal-mode-tag">Disponível</span></div>
+            <p class="portal-status">Frontend: HTML, CSS, JavaScript, Babylon.js e React. Backend: Node.js e SQLite na AWS EC2.</p>
           </section>
         </aside>
       </main>
-      <footer class="portal-footer"><span>GRUPO 08 · DESENVOLVIMENTO DE SOFTWARE EM NUVEM · UNIFOR</span><span>Vite + Babylon.js + Nhost</span></footer>
+      <footer class="portal-footer"><span>UNIFOR · AMBIENTES DE DESENVOLVIMENTO DE SOFTWARE</span><span>Vite + Babylon.js + React · Node.js + SQLite · AWS</span></footer>
     </div>
   </div>
 
@@ -130,59 +126,6 @@
       <button id="pause-home" class="secondary-button">VOLTAR AO PORTAL</button>
     </div>
   </div>
-  <div class="cloud-modal hidden" id="cloud-modal"><div class="cloud-modal-inner panel">
-    <button class="icon-button close-cloud" id="close-cloud">×</button>
-    <small class="eyebrow">CONEXÃO COM A NUVEM</small>
-    <h2>Conta e partidas</h2><p id="cloud-description">Conecte seu projeto Nhost para registrar o progresso.</p>
-    <p id="cloud-project" class="cloud-project" aria-live="polite"></p>
-    <form id="cloud-login-form"><input id="cloud-email" type="email" placeholder="Seu e-mail" autocomplete="email" required/><input id="cloud-password" type="password" placeholder="Sua senha" autocomplete="current-password" required minlength="8"/>
-      <div class="cloud-actions"><button class="primary-button" type="submit" data-action="login">ENTRAR</button><button type="button" class="secondary-button" id="cloud-register">CRIAR CONTA</button></div>
-    </form>
-    <div id="cloud-user" class="hidden"><p id="cloud-user-name"></p><button id="cloud-logout" class="secondary-button">SAIR DA CONTA</button></div>
-    <section id="cloud-dashboard" class="cloud-dashboard hidden" aria-live="polite">
-      <h3>Minhas partidas no Nhost</h3>
-      <p id="cloud-realtime-status">Sincronizacao nao iniciada.</p>
-      <ol id="cloud-score-list"><li>Carregando partidas...</li></ol>
-      <button id="cloud-refresh-scores" class="secondary-button" type="button">ATUALIZAR DADOS</button>
-      <h3>Storage: comprovante da aventura</h3>
-      <label for="cloud-proof">Enviar imagem privada (PNG, JPEG ou WebP, ate 2 MB)</label>
-      <input type="file" id="cloud-proof" accept="image/png,image/jpeg,image/webp"/>
-      <button id="cloud-upload-proof" class="secondary-button" type="button">ENVIAR AO NHOST</button>
-      <p id="cloud-storage-status" role="status"></p>
-    </section>
-    <p class="cloud-message" id="cloud-message" role="status" aria-live="polite"></p>
-  </div></div>
-  <div class="duel-modal hidden" id="duel-modal" role="dialog" aria-modal="true" aria-labelledby="duel-title">
-    <div class="duel-card panel">
-      <button id="duel-close" type="button" class="icon-button duel-close" aria-label="Fechar duelo">×</button>
-      <small class="eyebrow">ARENA DOS CONJUNTOS · NHOST</small>
-      <h2 id="duel-title">Competição online</h2>
-      <p id="duel-message" class="duel-message" role="status">Crie uma sala ou entre com um código de convite.</p>
-      <div id="duel-setup">
-        <label for="duel-nickname">Apelido público no ranking</label>
-        <input id="duel-nickname" maxlength="24" minlength="3" value="Aventureiro" autocomplete="nickname"/>
-        <button id="duel-create" type="button" class="primary-button duel-wide">CRIAR SALA E CONVIDAR</button>
-        <div class="duel-divider">OU ENTRE NA SALA DE UM AMIGO</div>
-        <label for="duel-code-input">Código de convite (8 caracteres)</label>
-        <input id="duel-code-input" maxlength="8" placeholder="EX: A7BK42DC" autocapitalize="characters"/>
-        <button id="duel-join" type="button" class="secondary-button duel-wide">ENTRAR NO DUELO</button>
-      </div>
-      <div id="duel-play" class="hidden">
-        <p class="duel-invite">CÓDIGO PARA CONVIDAR: <b id="duel-room-code">--------</b></p>
-        <div class="duel-scoreboard">
-          <div><small>JOGADOR 1</small><strong id="duel-host-name">Aventureiro</strong><b id="duel-host-score">0</b><span id="duel-host-round">0/6</span></div>
-          <div class="duel-versus">VS</div>
-          <div><small>JOGADOR 2</small><strong id="duel-guest-name">Aguardando</strong><b id="duel-guest-score">0</b><span id="duel-guest-round">0/6</span></div>
-        </div>
-        <small id="duel-round-label" class="eyebrow">AGUARDANDO O SEGUNDO JOGADOR</small>
-        <h3 id="duel-question">Aguardando…</h3>
-        <div id="duel-answers" class="answer-grid"></div>
-        <p id="duel-connection" class="portal-status">Conectando ao tempo real…</p>
-        <div class="duel-actions"><button id="duel-refresh" type="button" class="secondary-button">ATUALIZAR</button><button id="duel-cancel" type="button" class="secondary-button">ENCERRAR PARTIDA</button><button id="duel-back" type="button" class="secondary-button">OUTRA SALA</button></div>
-      </div>
-    </div>
-  </div>
-  <button id="cloud-open" class="cloud-open" aria-label="Abrir conexão Nhost" title="Nhost: conta e ranking">☁ Conta / Ranking</button>
 </div>
 <div id="entregavel5-root"></div>
 <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
