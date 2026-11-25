@@ -5,6 +5,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 
 BASE = os.environ.get("CONQUEST_TEST_BASE", "http://127.0.0.1:5173").rstrip("/")
@@ -21,7 +22,12 @@ class ConquestE6BrowserTests(unittest.TestCase):
         options.add_argument("--window-size=1440,900")
         options.add_argument("--use-gl=swiftshader")
         options.add_argument("--enable-unsafe-swiftshader")
-        cls.driver = webdriver.Chrome(options=options)
+        chrome_binary = os.environ.get('CONQUEST_CHROME_BINARY')
+        driver_binary = os.environ.get('CONQUEST_CHROMEDRIVER_BINARY')
+        if chrome_binary:
+            options.binary_location = chrome_binary
+        service = Service(executable_path=driver_binary) if driver_binary else Service()
+        cls.driver = webdriver.Chrome(service=service, options=options)
         cls.driver.set_page_load_timeout(45)
 
     @classmethod
